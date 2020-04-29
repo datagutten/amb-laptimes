@@ -7,8 +7,10 @@
         "datagutten/tools": "^1.1",
         "datagutten/amb-p3-parser": "^1.0",
         "ext-json": "*",
-        "ext-pdo": "*",
-        "phpunit/phpunit": "^8.0"
+        "ext-pdo": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8"
     },
     "authors": [
         {
