@@ -36,7 +36,7 @@ class passing_db
 	function init()
 	{
 		$this->st_insert=$this->db->prepare($this->q="INSERT INTO {$this->table} (rtc_time,passing_number,transponder,strength,hits,flags,decoder_id) VALUES (?,?,?,?,?,?,?)");
-		$st_times=$this->db->query("SELECT rtc_time FROM {$this->table}") or $this->error();
+		$st_times=$this->db->query("SELECT rtc_time FROM {$this->table}");
 		$this->times_indb=$st_times->fetchAll(PDO::FETCH_COLUMN); //Get all passings already in db	
 	}
 
@@ -59,10 +59,4 @@ class passing_db
 								) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 								 ',$decoder_id));
     }
-
-	function error()
-	{
-		$errorinfo=$this->db->errorInfo();
-		throw new Exception("SQL error: ".$errorinfo[2]);
-	}
 }
