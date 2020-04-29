@@ -24,9 +24,13 @@ class laptimes extends passings_db
 		$q=sprintf('rtc_time>=%s AND rtc_time<=%s',$time_today_start,$time_today_end);
 		return $q;
 	}
-	function rounds($limit=50)
+	function rounds($limit=90)
 	{
-		$passings=$this->db->query(sprintf('SELECT * FROM passings_%s ORDER BY rtc_time DESC LIMIT 90',$this->decoder), 'all');// LIMIT '.$limit
+	    if(!is_numeric($limit))
+	        throw new UnexpectedValueException('Limit is not numeric');
+        //The returned number of passings might be lower than the limit because the limit includes invalid passings
+        //TODO: Count and limit rounds instead of passings
+		$passings=$this->db->query(sprintf('SELECT * FROM passings_%s ORDER BY rtc_time DESC LIMIT %d',$this->decoder, $limit), 'all');
 		$transponders=array_column($passings,'transponder');
 
 		foreach($passings as $key=>$passing) //Last passing first
