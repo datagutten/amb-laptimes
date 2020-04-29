@@ -123,9 +123,10 @@ class laptimes extends passings_db
     /**
      * Calculate stats for rounds
      * @param array $rounds Return value from rounds()
+     * @param bool $save_debug_info Save files with debug information
      * @return array Argument array with added values for CSS class and best time
      */
-	function stats($rounds)
+	function stats($rounds, $save_debug_info = false)
 	{
 		$reverse_rounds=array_reverse($rounds,true);
 		//First round has highest key
@@ -179,8 +180,10 @@ class laptimes extends passings_db
 				break;*/
 			$counter++;
 		}
-		/*file_put_contents('debug.txt',$debug);
-		file_put_contents('debug2.txt',$debug2);*/
+		if($save_debug_info && isset($debug) && isset($debug2)) {
+            file_put_contents('debug.txt', $debug);
+            file_put_contents('debug2.txt', $debug2);
+        }
 		return $rounds;
 	}
 
