@@ -1,0 +1,25 @@
+{
+    "name": "datagutten/amb-laptimes",
+    "description": "A tool to save passings from a AMB/MyLaps decoder and calculate lap times",
+    "type": "project",
+    "license": "GPL-3.0-or-later",
+    "require": {
+        "datagutten/tools": "^1.1",
+        "datagutten/amb-p3-parser": "^1.0",
+        "ext-json": "*",
+        "ext-pdo": "*",
+        "phpunit/phpunit": "^8.0"
+    },
+    "authors": [
+        {
+            "name": "datagutten",
+            "email": "datagutten@datagutten.net"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "datagutten\\amb\\laps\\": "src"
+        },
+    "classmap": ["class_laptimes.php"]
+    }
+}
