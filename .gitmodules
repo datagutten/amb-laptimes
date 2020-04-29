@@ -1,9 +1,0 @@
-[submodule "amb-p3-parser"]
-	path = amb-p3-parser
-	url = https://github.com/datagutten/amb-p3-parser.git
-[submodule "tools"]
-	path = tools
-	url = https://github.com/datagutten/tools.git
-[submodule "MyLaps-infoscreen"]
-	path = MyLaps-infoscreen
-	url = https://github.com/datagutten/MyLaps-infoscreen.git
