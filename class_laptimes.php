@@ -1,10 +1,7 @@
 <?php
-require 'db.php';
 class laptimes extends passings_db
 {
 	public $time_offset_hours=0;
-	public $decoder='20f93';
-	public $db;
 	public $best_rounds;
 	public $previous_round;
 	public $transponders;
@@ -76,22 +73,6 @@ class laptimes extends passings_db
 			if(!empty($transponder))
 				$round=array_merge($round,$transponder);
 
-			/*if(isset($this->transponders[$passing['transponder']]))
-			{
-				$transponder=$this->transponders[$passing['transponder']];
-				print_r($transponder);
-				foreach(array('transponder','nickname','avatar') as $field)
-				{
-					if(!empty($transponder[$field]))
-						$round[$field]=$transponder[$field];
-				}
-			}*/
-			//print_r($round);
-			/*if($round_time_seconds<60 && isset($last_round_key[$passing['transponder']]))
-			{
-				//Remove previous round
-				//unset($rounds[$last_round_key[$passing['transponder']]]);
-			}*/
 			$rounds[$key]=$round;
 			$last_round_key[$passing['transponder']]=$key;
 			$last_round[$passing['transponder']]=$round;
@@ -130,7 +111,6 @@ class laptimes extends passings_db
 	{
 		$reverse_rounds=array_reverse($rounds,true);
 		//First round has highest key
-		$counter=0;
 		foreach($reverse_rounds as $key=>$round) //First round first
 		{
 			$transponder=$round['transponder'];
@@ -157,7 +137,7 @@ class laptimes extends passings_db
 			}
 			if(date('Y-m-d',$round['start_time'])!=date('Y-m-d',$rounds[$key+1]['start_time']))
 				unset($this->best_rounds[$transponder]);
-			
+
 			//$best_round=$this->best_round($round['transponder'],$round['lapTime']);
 			//Find best round
 			if(empty($this->best_rounds[$transponder]))
@@ -176,9 +156,6 @@ class laptimes extends passings_db
 			}
 
 			$this->previous_round[$round['transponder']]=$round['lapTime'];
-			/*if($counter>=30)
-				break;*/
-			$counter++;
 		}
 		if($save_debug_info && isset($debug) && isset($debug2)) {
             file_put_contents('debug.txt', $debug);
@@ -206,9 +183,8 @@ class laptimes extends passings_db
 	function transponder_info($transponder)
 	{
 		if(empty($transponder))
-			return false;
-		/*$st_transponder=$this->db->prepare('SELECT transponder_id,transponder,nickname FROM transponders WHERE transponder_id=?');
-		$st_avatar=$this->db->prepare('SELECT avatar FROM transponders WHERE transponder_id=?');*/
+			throw new InvalidArgumentException('Transponder empty');
+
 		$st_transponder=$this->db->prepare('SELECT * FROM transponders WHERE transponder_id=?');
 
 		if(!isset($this->transponders[$transponder]))
