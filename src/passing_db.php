@@ -1,5 +1,15 @@
 <?php
-class passings_db
+
+
+namespace datagutten\amb\laps;
+
+
+use Exception;
+use PDO;
+use pdo_helper;
+use PDOException;
+
+class passing_db
 {
     /**
      * @var pdo_helper
