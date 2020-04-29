@@ -31,7 +31,7 @@ class laptimes extends passings_db
 	        throw new UnexpectedValueException('Limit is not numeric');
         //The returned number of passings might be lower than the limit because the limit includes invalid passings
         //TODO: Count and limit rounds instead of passings
-		$passings=$this->db->query(sprintf('SELECT * FROM passings_%s ORDER BY rtc_time DESC LIMIT %d',$this->decoder, $limit), 'all');
+		$passings=$this->db->query(sprintf('SELECT * FROM %s ORDER BY rtc_time DESC LIMIT %d',$this->table, $limit), 'all');
 		$transponders=array_column($passings,'transponder');
 
 		$rounds = [];
@@ -171,7 +171,7 @@ class laptimes extends passings_db
      */
 	function unique_transponders($timestamp_day=false)
 	{
-		$q_todays_transponders=sprintf('SELECT distinct transponder FROM passings_%s WHERE %s ORDER BY rtc_time DESC',$this->decoder,$this->query_today($timestamp_day)); //Get todays drivers
+		$q_todays_transponders=sprintf('SELECT distinct transponder FROM %s WHERE %s ORDER BY rtc_time DESC',$this->table,$this->query_today($timestamp_day)); //Get todays drivers
 		return $this->db->query($q_todays_transponders,'all_column');
 	}
 
