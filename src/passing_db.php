@@ -8,6 +8,7 @@ use Exception;
 use PDO;
 use pdo_helper;
 use PDOException;
+use PDOStatement;
 
 class passing_db
 {
@@ -15,7 +16,10 @@ class passing_db
      * @var pdo_helper
      */
 	public $db;
-	public $st_insert=false;
+    /**
+     * @var PDOStatement
+     */
+    public $st_insert;
 	public $times_indb;
 	public $table;
 	function __construct($decoder_id)
