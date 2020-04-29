@@ -37,6 +37,7 @@ class laptimes extends passings_db
 		$passings=$this->db->query(sprintf('SELECT * FROM passings_%s ORDER BY rtc_time DESC LIMIT %d',$this->decoder, $limit), 'all');
 		$transponders=array_column($passings,'transponder');
 
+		$rounds = [];
 		foreach($passings as $key=>$passing) //Last passing first
 		{
 			unset($transponders[$key]); //Avoid hitting current transponder with search
