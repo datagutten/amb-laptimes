@@ -1,5 +1,8 @@
 <?php
-class laptimes extends passings_db
+
+use datagutten\amb\laps\passing_db;
+
+class laptimes extends passing_db
 {
 	public $time_offset_hours=0;
 	public $best_rounds;
