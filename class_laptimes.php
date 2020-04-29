@@ -8,11 +8,9 @@ class laptimes extends passings_db
 	public $best_rounds;
 	public $previous_round;
 	public $transponders;
-	function __construct()
+	function __construct($decoder_id)
 	{
-		require 'tools/pdo_helper.class.php';
-		$this->db=new pdo_helper;
-		$this->db->connect_db_config();
+        parent::__construct($decoder_id);
 		date_default_timezone_set('GMT');
 	}
 	function query_today($timestamp_day=false)

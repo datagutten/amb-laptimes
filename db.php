@@ -1,6 +1,9 @@
 <?php
 class passings_db
 {
+    /**
+     * @var pdo_helper
+     */
 	public $db;
 	public $st_insert=false;
 	public $times_indb;
@@ -9,9 +12,17 @@ class passings_db
 	{
 		//require 'config.php';
 		$this->table='passings_'.$decoder_id;
-		require 'config_db.php';
-		$this->db = new PDO($config_db['dsn'],$config_db['username'],$config_db['passwd']);
+
+		$this->db = new pdo_helper();
+		try {
+            $this->db->connect_db_config();
+        }
+        catch (Exception $e)
+        {
+            die($e->getMessage());
+        }
 	}
+
 	function init()
 	{
 		$this->st_insert=$this->db->prepare($this->q="INSERT INTO {$this->table} (rtc_time,passing_number,transponder,strength,hits,flags,decoder_id) VALUES (?,?,?,?,?,?,?)");
