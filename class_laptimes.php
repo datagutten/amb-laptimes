@@ -24,6 +24,12 @@ class laptimes extends passings_db
 		$q=sprintf('rtc_time>=%s AND rtc_time<=%s',$time_today_start,$time_today_end);
 		return $q;
 	}
+
+    /**
+     * Get last rounds
+     * @param int $limit
+     * @return array
+     */
 	function rounds($limit=90)
 	{
 	    if(!is_numeric($limit))
@@ -114,6 +120,12 @@ class laptimes extends passings_db
 		else
 			return $this->best_rounds[$transponder];
 	}*/
+
+    /**
+     * Calculate stats for rounds
+     * @param array $rounds Return value from rounds()
+     * @return array Argument array with added values for CSS class and best time
+     */
 	function stats($rounds)
 	{
 		$reverse_rounds=array_reverse($rounds,true);
@@ -172,11 +184,23 @@ class laptimes extends passings_db
 		file_put_contents('debug2.txt',$debug2);*/
 		return $rounds;
 	}
+
+    /**
+     * Get unique transponders
+     * @param bool $timestamp_day
+     * @return array Unique transponder numbers
+     */
 	function unique_transponders($timestamp_day=false)
 	{
 		$q_todays_transponders=sprintf('SELECT distinct transponder FROM passings_%s WHERE %s ORDER BY rtc_time DESC',$this->decoder,$this->query_today($timestamp_day)); //Get todays drivers
 		return $this->db->query($q_todays_transponders,'all_column');
 	}
+
+    /**
+     * Get information about a transponder
+     * @param string $transponder Transponder number
+     * @return array
+     */
 	function transponder_info($transponder)
 	{
 		if(empty($transponder))
