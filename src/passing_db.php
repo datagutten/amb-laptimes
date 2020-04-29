@@ -39,20 +39,27 @@ class passing_db
 		$st_times=$this->db->query("SELECT rtc_time FROM {$this->table}") or $this->error();
 		$this->times_indb=$st_times->fetchAll(PDO::FETCH_COLUMN); //Get all passings already in db	
 	}
-	function insert($record_parsed)
-	{
-		if(array_search($record_parsed['RTC_TIME'],$this->times_indb)!==false)
-			return true;
-		if(isset($record_parsed['error'])) //Don't put bad records in the DB
-			return false;
-		$status=$this->st_insert->execute($fields=array($record_parsed['RTC_TIME'],$record_parsed['PASSING_NUMBER'],$record_parsed['TRANSPONDER'],$record_parsed['STRENGTH'],$record_parsed['HITS'],$record_parsed['FLAGS'],dechex($record_parsed['DECODER_ID'])));
-		if($status===false)
-		{
-			$errorinfo=$this->st_insert->errorInfo();
-			trigger_error("SQL error: ".$errorinfo[2]);
-			return false;
-		}
-	}
+
+    /**
+     * Create passing table for a decoder
+     * @param $decoder_id
+     * @throws PDOException
+     */
+    public function create_table($decoder_id)
+    {
+        $this->db->query(sprintf('CREATE TABLE `passings_%s` (
+								  `rtc_time` bigint(16) NOT NULL,
+								  `passing_number` int(4) DEFAULT NULL,
+								  `transponder` int(9) DEFAULT NULL,
+								  `strength` int(3) DEFAULT NULL,
+								  `hits` int(3) DEFAULT NULL,
+								  `flags` int(3) DEFAULT NULL,
+								  `decoder_id` varchar(6) DEFAULT NULL,
+								  PRIMARY KEY (`rtc_time`)
+								) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+								 ',$decoder_id));
+    }
+
 	function error()
 	{
 		$errorinfo=$this->db->errorInfo();
