@@ -211,7 +211,10 @@ class laptimes extends passings_db
 
 		if(!isset($this->transponders[$transponder]))
 		{
-			$this->transponders[$transponder]=array_filter($this->db->execute($st_transponder,array($transponder),'assoc'));
+            $transponder_db = $this->db->execute($st_transponder,array($transponder),'assoc');
+            if(empty($transponder_db))
+                return array();
+			$this->transponders[$transponder]=array_filter($transponder_db);
 			return $this->transponders[$transponder];
 		}
 			
