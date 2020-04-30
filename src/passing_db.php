@@ -5,6 +5,7 @@ namespace datagutten\amb\laps;
 
 
 use Exception;
+use FileNotFoundException;
 use PDO;
 use pdo_helper;
 use PDOException;
@@ -22,19 +23,20 @@ class passing_db
     public $st_insert;
 	public $times_indb;
 	public $table;
+
+    /**
+     * passing_db constructor.
+     * @param $decoder_id
+     * @throws FileNotFoundException Config file not found
+     * @throws PDOException Database connection failed
+     */
 	function __construct($decoder_id)
 	{
 		//require 'config.php';
 		$this->table='passings_'.$decoder_id;
 
 		$this->db = new pdo_helper();
-		try {
-            $this->db->connect_db_config();
-        }
-        catch (Exception $e)
-        {
-            die($e->getMessage());
-        }
+        $this->db->connect_db_config();
 	}
 
 	function init()
