@@ -4,7 +4,6 @@
 namespace datagutten\amb\laps;
 
 
-use Exception;
 use FileNotFoundException;
 use PDO;
 use pdo_helper;

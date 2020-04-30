@@ -27,6 +27,7 @@ class laptimes extends passing_db
      * Get last rounds
      * @param int $limit
      * @return array
+     * @throws PDOException Database error
      */
 	function rounds($limit=90)
 	{
@@ -198,7 +199,6 @@ class laptimes extends passing_db
 			$this->transponders[$transponder]=array_filter($transponder_db);
 			return $this->transponders[$transponder];
 		}
-			
 		else
 			return $this->transponders[$transponder];
 	}
