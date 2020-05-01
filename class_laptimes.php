@@ -176,7 +176,7 @@ class laptimes extends passing_db
      */
 	function unique_transponders($timestamp_day=false)
 	{
-		$q_todays_transponders=sprintf('SELECT distinct transponder FROM %s WHERE %s ORDER BY rtc_time DESC',$this->table,$this->query_today($timestamp_day)); //Get todays drivers
+		$q_todays_transponders=sprintf('SELECT transponder FROM %s WHERE %s GROUP BY transponder ORDER BY rtc_time DESC',$this->table,$this->query_today($timestamp_day)); //Get todays drivers
 		return $this->db->query($q_todays_transponders,'all_column');
 	}
 

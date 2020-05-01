@@ -20,7 +20,7 @@ matrix:
   - php: '5.6'
 
 services:
-   - mariadb
+   - mysql
 
 addons:
    apt:
