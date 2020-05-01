@@ -13,8 +13,9 @@ class laptimes extends passing_db
         parent::__construct($decoder_id);
 		date_default_timezone_set('GMT');
 	}
-	function query_today($timestamp_day=false)
+	public static function query_today($timestamp_day=false)
 	{
+        date_default_timezone_set('GMT');
 		if($timestamp_day===false)
 			$timestamp_day=time();
 		$time_today_start=strtotime('0:00',$timestamp_day).'000000';

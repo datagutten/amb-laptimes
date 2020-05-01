@@ -8,6 +8,7 @@
     <filter>
         <whitelist>
             <directory>src</directory>
+            <file>class_laptimes.php</file>
         </whitelist>
     </filter>
     <logging>
