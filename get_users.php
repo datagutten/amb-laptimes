@@ -1,8 +1,11 @@
 <?Php
-require 'vendor/autoload.php';
-$db = new pdo_helper();
-$db->connect_db_config();
 
+use datagutten\amb\laps\passing_db;
+
+require 'vendor/autoload.php';
+
+$passing_db = new passing_db('');
+$db = $passing_db->db;
 
 $data=file_get_contents('https://speedhive.mylaps.com/Practice/238/PracticeTrackData?id=238');
 $dom=new DOMDocument;
