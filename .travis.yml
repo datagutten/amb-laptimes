@@ -24,9 +24,7 @@ addons:
       packages:
          - php-mysql
          - php-xml
-         - mariadb-client
-         - mariadb-server
-   mariadb: '10.0'
+   mariadb: '10.3'
 
 before_install:
    - sudo mysql -e 'CREATE DATABASE passings_test'
