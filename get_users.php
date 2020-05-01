@@ -7,7 +7,18 @@ require 'vendor/autoload.php';
 $passing_db = new passing_db('');
 $db = $passing_db->db;
 
-$data=file_get_contents('https://speedhive.mylaps.com/Practice/238/PracticeTrackData?id=238');
+$decoders = @include 'config_decoders.php';
+if(empty($decoders))
+    die("Missing decoder config file\n");
+
+if(!isset($argv[1]))
+    die("Usage: passing_saver.php [decoder name]");
+if(!isset($decoders[$argv[1]]))
+    die("Invalid decoder\n");
+else
+    $decoder = $decoders[$argv[1]];
+
+$data=file_get_contents(sprintf('https://speedhive.mylaps.com/Practice/%1$d/PracticeTrackData?id=%1$d', $decoder['mylaps_id']));
 $dom=new DOMDocument;
 @$dom->loadHtml($data);
 //print_r($dom->getElementsByTagName('h1')->);
