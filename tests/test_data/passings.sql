@@ -4,6 +4,17 @@ LIMIT 0, 1000
 
 -- Date: 2020-05-01 12:04
 */
+CREATE TABLE `passings_20f93` (
+								  `rtc_time` bigint(16) NOT NULL,
+								  `passing_number` int(4) DEFAULT NULL,
+								  `transponder` int(9) DEFAULT NULL,
+								  `strength` int(3) DEFAULT NULL,
+								  `hits` int(3) DEFAULT NULL,
+								  `flags` int(3) DEFAULT NULL,
+								  `decoder_id` varchar(6) DEFAULT NULL,
+								  PRIMARY KEY (`rtc_time`)
+								) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
 INSERT INTO `passings_20f93` (`rtc_time`,`passing_number`,`transponder`,`strength`,`hits`,`flags`,`decoder_id`) VALUES (1588175428203000,470383,7824878,107,45,0,'20f93');
 INSERT INTO `passings_20f93` (`rtc_time`,`passing_number`,`transponder`,`strength`,`hits`,`flags`,`decoder_id`) VALUES (1588175484861000,470384,7824878,103,91,0,'20f93');
 INSERT INTO `passings_20f93` (`rtc_time`,`passing_number`,`transponder`,`strength`,`hits`,`flags`,`decoder_id`) VALUES (1588175551541000,470385,7824878,101,60,0,'20f93');
