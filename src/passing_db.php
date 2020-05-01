@@ -64,4 +64,15 @@ class passing_db
 								) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 								 ',$decoder_id));
     }
+
+    /**
+     * Insert parsed passing record into database
+     * @param array $record_parsed Parsed passing record
+     */
+    function insert($record_parsed)
+    {
+        if(array_search($record_parsed['RTC_TIME'],$this->times_indb)!==false)
+            return;
+        $this->st_insert->execute($fields=array($record_parsed['RTC_TIME'],$record_parsed['PASSING_NUMBER'],$record_parsed['TRANSPONDER'],$record_parsed['STRENGTH'],$record_parsed['HITS'],$record_parsed['FLAGS'],dechex($record_parsed['DECODER_ID'])));
+    }
 }
