@@ -1,0 +1,42 @@
+language: php
+php:
+  - '5.6'
+  - '7.0'
+  - '7.1'
+  - '7.2'
+  - '7.3'
+  - '7.4'
+
+matrix:
+ fast_finish: true
+ include:
+  - php: '7.4'
+    script:
+       - vendor/bin/phpunit
+    after_script:
+       - bash <(curl -s https://codecov.io/bash)
+  - os: linux
+ allow_failures:
+  - php: '5.6'
+
+services:
+   - mysql
+
+addons:
+   apt:
+      packages:
+         - php-mysql
+         - php-xml
+
+before_install:
+   - mysql -e 'GRANT ALL PRIVILEGES ON `passings_test`.* TO "php_test"@"localhost" IDENTIFIED BY "password";'
+
+
+install:
+ - composer install --no-interaction;
+
+before_script:
+ - vendor/bin/phpunit --version
+
+script:
+ - vendor/bin/phpunit --no-coverage;
