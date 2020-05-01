@@ -1,6 +1,7 @@
 <?Php
 
 use datagutten\amb\laps\passing_db;
+use datagutten\amb\parser\socket;
 
 require 'vendor/autoload.php';
 $parser=new amb_p3_parser;
@@ -12,31 +13,23 @@ if(isset($argv[1]) && file_exists($conf=dirname(__FILE__)."/config_socket_{$argv
 else
 	die("Missing config name\n");
 
-$socket=socket_create(AF_INET,SOCK_STREAM,0);
-$result=socket_connect($socket,$address,$port) or die("Could not connect to server\n");
-$buffer=socket_read ($socket, 1024);
-
-//Remove incomplete data at the beginning
-if(substr($buffer,0,1)!=chr(0x8E))
-	$buffer=substr($buffer,strpos($buffer,chr(0x8E)));
+$socket = new socket($address, $port);
 
 while (true) 
 {
-	if(($endpos=strpos($buffer,chr(0x8F)))===false)
-		$buffer.=socket_read ($socket, 1024); //No complete data in buffer, read more
-	if(empty($buffer))
-		continue;
-	$data_end=strrpos($buffer,chr(0x8F)); //Get position of last end byte
-	$records=$parser->get_records($buffer);
-	//var_dump(count($records));
-	$buffer=substr($buffer,$data_end+1); //Remove data from buffer
+    $records = $socket->read_records();
+    if(empty($records))
+        continue;
 
 	foreach($records as $record)
 	{
-		//var_dump(strlen($record));
 		$record_parsed=$parser->parse($record,0x01);
-		if(is_bool($record_parsed))
-			continue;
+		if($record_parsed===true)
+        {
+            //echo "Skip invalid type\n";
+            continue;
+        }
+
 		print_r($record_parsed);
 		if(!isset($db))
 		{
