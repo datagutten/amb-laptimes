@@ -55,7 +55,9 @@ class laptimesTest extends TestCase
             'nickname' => null,
             'datetime' => '19:25:49 29.04.2020',
             'best-time' => null,
-            'class' => null];
+            'class' => null,
+            'transponder_id' => '7824878',
+            'transponder_name'=> 'PetterS'];
         $this->assertEquals($round, $rounds[0]);
     }
 
