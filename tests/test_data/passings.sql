@@ -13,7 +13,7 @@ CREATE TABLE `passings_20f93` (
 								  `flags` int(3) DEFAULT NULL,
 								  `decoder_id` varchar(6) DEFAULT NULL,
 								  PRIMARY KEY (`rtc_time`)
-								) ENGINE=InnoDB DEFAULT CHARSET=utf8
+								) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `passings_20f93` (`rtc_time`,`passing_number`,`transponder`,`strength`,`hits`,`flags`,`decoder_id`) VALUES (1588175428203000,470383,7824878,107,45,0,'20f93');
 INSERT INTO `passings_20f93` (`rtc_time`,`passing_number`,`transponder`,`strength`,`hits`,`flags`,`decoder_id`) VALUES (1588175484861000,470384,7824878,103,91,0,'20f93');
