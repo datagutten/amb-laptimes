@@ -61,19 +61,19 @@ class laptimes extends passing_db
 			if($round_time_seconds>60) //Hide rounds which is too slow
 				continue;
 
-			$start_time=substr($prev_passing['rtc_time'],0,-6); //Convert start time to valid unix timestamp
+			$start_time=(int)substr($prev_passing['rtc_time'],0,-6); //Convert start time to valid unix timestamp
 			$round=array(
 				'round_time'=>$round_time,
 				'lapTime'=>$round_time_seconds,
-				'transponder'=>$passing['transponder'],
+				'transponder'=>(int)$passing['transponder'],
 				'start_time'=>$start_time,
-				'first_passing'=>$prev_passing['passing_number'],
-				'last_passing'=>$passing['passing_number'],
-				'avatar'=>'',
-				'nickname'=>'',
+				'first_passing'=>(int)$prev_passing['passing_number'],
+				'last_passing'=>(int)$passing['passing_number'],
+				'avatar'=>null,
+				'nickname'=>null,
 				'datetime'=>date('H:i:s d.m.Y',$start_time),
-				'best-time'=>'',
-				'class'=>'');
+				'best-time'=>null,
+				'class'=>null);
 			$transponder=$this->transponder_info($passing['transponder']);
 			if(!empty($transponder))
 				$round=array_merge($round,$transponder);
