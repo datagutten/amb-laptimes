@@ -8,6 +8,7 @@ class passing_dbTest extends TestCase
 {
     public function testCreate_table()
     {
+        set_include_path(__DIR__);
         $passings = new passing_db('test_decoder');
         $passings->create_table('test_decoder');
 
