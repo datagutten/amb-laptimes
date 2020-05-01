@@ -29,8 +29,9 @@ addons:
          - php-xml
 
 before_install:
+   - mysql -e 'CREATE DATABASE passings_test'
    - mysql -e 'GRANT ALL PRIVILEGES ON `passings_test`.* TO "php_test"@"localhost" IDENTIFIED BY "password";'
-
+   - cp tests/test_config_db.php tests/config_db.php
 
 install:
  - composer install --no-interaction;
