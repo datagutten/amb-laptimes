@@ -109,14 +109,28 @@ class mylaps
 
     /**
      * @param string $avatar_url URL to avatar
-     * @param string $avatar_file Local file to save the avatar to
+     * @param string $avatar_folder Avatar folder
+     * @param int $transponder_id Transponder ID
      * @throws MyLapsException
+     * @return string Avatar file with extension
      */
-    public static function download_avatar($avatar_url, $avatar_file)
+    public static function download_avatar($avatar_url, $avatar_folder, $transponder_id)
     {
-        self::get($avatar_url, [], ['filename'=>$avatar_file]);
-        if(!file_exists($avatar_file))
-            throw new MyLapsException('Avatar download error');
+        $response = Requests::head($avatar_url);
+        if(!$response->success)
+            throw new MyLapsException('Avatar head request error, HTTP status %d', $response->status_code);
+
+        $type = $response->headers['Content-Type'];
+        $extension = preg_replace('#image/([a-z]+)#i', '$1', $type);
+        if($type===$extension)
+            throw new MyLapsException('Unable to determine extension for MIME type '.$type);
+
+        $avatar_file = sprintf('%s/%d.%s',$avatar_folder, $transponder_id, $extension);
+        $response = Requests::get($avatar_url, [], ['filename'=>$avatar_file]);
+        if(!file_exists($avatar_file) || !$response->success)
+            throw new MyLapsException(sprintf('Avatar download error, HTTP status %d', $response->status_code));
+
+        return $avatar_file;
     }
 
     /**

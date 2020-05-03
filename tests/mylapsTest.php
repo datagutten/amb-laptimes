@@ -51,9 +51,12 @@ class mylapsTest extends TestCase
 
     public function testDownloadAvatar()
     {
-        $avatar_file = sys_get_temp_dir().'/avatar_test.jpg';
-        mylaps::download_avatar('https://speedhive.mylaps.com/Images/MYLAPS-GA-66c5a32dc0344fce946b0e8f6262dbff/1', $avatar_file);
+        $avatar_folder = sys_get_temp_dir().'/avatar_test';
+        mkdir($avatar_folder);
+        $avatar_file = mylaps::download_avatar('https://speedhive.mylaps.com/Images/MYLAPS-GA-66c5a32dc0344fce946b0e8f6262dbff/1', $avatar_folder, 2583246);
         $this->assertFileExists($avatar_file);
         $this->assertGreaterThan(0, filesize($avatar_file));
+        unlink($avatar_file);
+        rmdir($avatar_folder);
     }
 }

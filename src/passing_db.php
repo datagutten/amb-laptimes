@@ -20,6 +20,15 @@ class passing_db
      * @var PDOStatement
      */
     public $st_insert;
+    /**
+     * @var PDOStatement Query to insert a transponder in the database
+     */
+    public $st_insert_transponder;
+    /**
+     * @var PDOStatement Query to update a existing transponder in the database
+     */
+    public $st_update_transponder;
+
 	public $times_indb;
 	public $table;
 
@@ -44,6 +53,16 @@ class passing_db
 		$st_times=$this->db->query("SELECT rtc_time FROM {$this->table}");
 		$this->times_indb=$st_times->fetchAll(PDO::FETCH_COLUMN); //Get all passings already in db	
 	}
+
+    /**
+     * Prepare transponder related queries
+     */
+	function init_transponders()
+    {
+        $this->st_insert_transponder = $this->db->prepare('INSERT INTO transponders (transponder_id, transponder_name, nickname) VALUES (?,?,?)');
+        $this->st_update_transponder = $this->db->prepare('UPDATE transponders SET transponder_name=?, nickname=? WHERE transponder_id=?');
+        $this->transpondersInDB = $this->transponders(true);
+    }
 
     /**
      * Create passing table for a decoder
@@ -93,5 +112,21 @@ class passing_db
         {
             return $this->db->query('SELECT * FROM transponders');
         }
+    }
+
+    /**
+     * Save transponder info in the database
+     * @param $activity_info
+     */
+    function save_transponder($activity_info)
+    {
+        if(empty($this->transpondersInDB))
+            $this->init_transponders();
+        if(array_search($activity_info['transponder_id'], $this->transpondersInDB)===false) {
+            $this->st_insert_transponder->execute(array($activity_info['transponder_id'], $activity_info['transponder_name'], $activity_info['driver_name']));
+            $this->transpondersInDB[] = $activity_info['transponder_id'];
+        }
+        else
+            $this->st_update_transponder->execute([$activity_info['transponder_name'], $activity_info['driver_name'], $activity_info['transponder_id']]);
     }
 }
