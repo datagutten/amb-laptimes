@@ -94,8 +94,10 @@ class mylaps
             $nickname = null;
 
         preg_match('#class="practice-transponder">\s+Transponder \#(.+)\s+</div>#', $response->body, $transponder_name);
-        if(!empty($transponder_name))
+        if(!empty($transponder_name)) {
             $transponder_name = trim($transponder_name[1]);
+            $transponder_name = html_entity_decode($transponder_name);
+        }
         else
             $transponder_name = null;
 
