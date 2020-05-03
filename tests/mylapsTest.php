@@ -19,7 +19,7 @@ class mylapsTest extends TestCase
         $mylaps = new mylaps(238);
         $activities = $mylaps->activities();
         $id = mylaps::activity_id($activities[0]);
-        $this->assertIsInt($id);
+        $this->assertTrue(is_int($id));
     }
 
     function testActivityInfo()
