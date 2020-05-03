@@ -56,4 +56,20 @@ class passing_dbTest extends TestCase
             $passings->db->query('DROP TABLE passings_test_decoder');
         }
     }
+
+    public function testTransponders()
+    {
+        set_include_path(__DIR__);
+        $passings = new passing_db('test_decoder');
+        $transponders = $passings->transponders(true);
+        $this->assertTrue(is_array($transponders));
+    }
+
+    public function testTransponders2()
+    {
+        set_include_path(__DIR__);
+        $passings = new passing_db('test_decoder');
+        $transponders = $passings->transponders();
+        $this->assertInstanceOf('PDOStatement', $transponders);
+    }
 }

@@ -52,7 +52,7 @@ class laptimesTest extends TestCase
             'first_passing' => 470764,
             'last_passing' => 470765,
             'avatar' => null,
-            'nickname' => null,
+            'nickname' => 'PetterS',
             'datetime' => '19:25:49 29.04.2020',
             'best-time' => null,
             'class' => null,

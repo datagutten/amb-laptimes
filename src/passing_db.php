@@ -75,4 +75,23 @@ class passing_db
             return;
         $this->st_insert->execute($fields=array($record_parsed['RTC_TIME'],$record_parsed['PASSING_NUMBER'],$record_parsed['TRANSPONDER'],$record_parsed['STRENGTH'],$record_parsed['HITS'],$record_parsed['FLAGS'],dechex($record_parsed['DECODER_ID'])));
     }
+
+    /**
+     * Get all transponder information in database
+     * @param bool $id_only Get only the id of the transponder
+     * @return array|PDOStatement
+     */
+    function transponders($id_only = false)
+    {
+        if($id_only) {
+            $transponders = $this->db->query('SELECT transponder_id FROM transponders', 'all_column');
+            if (empty($transponders))
+                $transponders = [];
+            return $transponders;
+        }
+        else
+        {
+            return $this->db->query('SELECT * FROM transponders');
+        }
+    }
 }

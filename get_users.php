@@ -1,5 +1,7 @@
 <?Php
 
+use datagutten\amb\laps\exceptions\MyLapsException;
+use datagutten\amb\laps\mylaps;
 use datagutten\amb\laps\passing_db;
 
 require 'vendor/autoload.php';
@@ -19,65 +21,55 @@ else
     $decoder = $decoders[$argv[1]];
 
 $data=file_get_contents(sprintf('https://speedhive.mylaps.com/Practice/%1$d/PracticeTrackData?id=%1$d', $decoder['mylaps_id']));
-$dom=new DOMDocument;
-@$dom->loadHtml($data);
-//print_r($dom->getElementsByTagName('h1')->);
-$xml=simplexml_import_dom($dom);
+$mylaps = new mylaps($decoder['mylaps_id']);
 
-$activities=$xml->xpath("/html/body//a[contains(@href,'Activity')]"); ///@href
+try {
+    $activities = $mylaps->activities();
+}
+catch (MyLapsException $e)
+{
+    die($e->getMessage()."\n");
+}
+
+$existing_transponders = $passing_db->transponders(true);
+
+$st_insert_transponder = $passing_db->db->prepare('INSERT INTO transponders (transponder_id, transponder_name, nickname) VALUES (?,?,?)');
+$st_update_transponder = $passing_db->db->prepare('UPDATE transponders SET transponder_name=?, nickname=? WHERE transponder_id=?');
+
+if(!file_exists('avatars'))
+    mkdir('avatars');
+
 foreach($activities as $activity)
 {
 	//$activityId=686314222; //Roger Berntsen, navn på bruker, men ikke transponder og avatar
 	//$activityId=686300815; //Holla
 	//$activityId=686291167;// Sandgrind
-	$href=(string)$activity->attributes()['href'];
-	$activityId=preg_replace('#/Practice/([0-9]+)/Activity#','$1',$href);
+    try {
+        $activity_info = $mylaps->activity_info(mylaps::activity_id($activity));
+    }
+    catch (MyLapsException $e)
+    {
+        echo $e->getMessage()."\n";
+        continue;
+    }
+    if(empty($activity_info['transponder_name']) && empty($activity_info['driver_name']))
+        continue;
 
-	$user_name=$activity->xpath('.//span[@class="nickname"]');
+    if(!empty($activity_info['avatar_url'])) {
+        $avatar_file = sprintf('avatars/%s.jpg', $activity_info['transponder_id']);
+        try {
+            mylaps::download_avatar($activity_info['avatar_url'], $avatar_file);
+        }
+        catch (MyLapsException $e)
+        {
+            printf("Error downloading avatar: %s\n", $e->getMessage());
+        }
+    }
 
-	if(empty($user_name)) //No user name and no transponder name
-		continue;
-	elseif(empty($user_name[0])) //No user name, but has transponder name
-		$user_name=NULL;
-	else
-		$user_name=(string)$user_name[0];
-	if(empty($user_name))
-		$user_name=NULL;
-
-//preg_match('/[0-9]{7} \[[0-9]\]/',$user_name[0])
-	$transponder=trim($activity->xpath('.//div[@class="user-data"]')[0]);
-
-	if(!preg_match('/([0-9]{7}) \[[0-9]\]/',$transponder,$transpondernum)) //Transponder has name
-	{
-		$transponder_name=str_replace('Transponder #','',$transponder);
-		//var_dump($transponder_name);
-		$csv=file_get_contents('https://speedhive.mylaps.com/Export/GetCsv?activityId='.$activityId);
-        $csv=str_replace(chr(0),'',$csv);
-
-		preg_match('/([0-9]{7}),/',$csv,$transponder);
-		if(empty($transponder))
-		    continue;
-		$transponder=$transponder[1];
-	}
-	elseif(empty($user_name))
-		continue;
-	else
-	{
-		$transponder_name=NULL;
-		$transponder=$transpondernum[1];
-	}
-
-	$avatar=$activity->xpath('.//img[@class="user-avatar"]/@src');
-
-	if($avatar[0]!='/Images/MYLAPS-GA-b3d87aa2c32141af84b14508d8b35cb6/1')
-	{
-		$avatar='https://speedhive.mylaps.com'.(string)$avatar[0];
-		$avatar_data=file_get_contents($avatar);
-		$avatar_base64=base64_encode($avatar_data);
-	}
-	else
-		$avatar_base64=NULL;
-
-	$st_insert_transponder=$db->prepare('INSERT IGNORE INTO transponders VALUES (?,?,?,?)');
-	$st_insert_transponder->execute(array($transponder,$transponder_name,$user_name,$avatar_base64));
+    if(array_search($activity_info['transponder_id'], $existing_transponders)===false) {
+        $st_insert_transponder->execute(array($activity_info['transponder_id'], $activity_info['transponder_name'], $activity_info['driver_name']));
+        $existing_transponders[] = $activity_info['transponder_id'];
+    }
+    else
+        $st_update_transponder->execute([$activity_info['transponder_name'], $activity_info['driver_name'], $activity_info['transponder_id']]);
 }
