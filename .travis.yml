@@ -1,29 +1,31 @@
 language: php
-php:
-  - '5.6'
-  - '7.0'
-  - '7.1'
-  - '7.2'
-  - '7.3'
-  - '7.4'
 
 matrix:
- fast_finish: true
- include:
-  - php: '7.4'
-    script:
-       - vendor/bin/phpunit
-    after_script:
-       - bash <(curl -s https://codecov.io/bash)
-  - os: linux
- allow_failures:
-  - php: '5.6'
+  fast_finish: true
+  include:
+    - php: '7.1'
+      install:
+        - composer update --no-interaction
+    - php: '7.2'
+      install:
+        - composer update --no-interaction
+    - php: '7.3'
+    - php: '7.4'
+    - php: '8.0'
+    - php: 'nightly'
+    - php: '7.4'
+      name: 'Prefer lowest'
+      install:
+        - composer update --no-interaction --prefer-lowest
+  allow_failures:
+    - php: 'nightly'
+
+env:
+  global:
+    - XDEBUG_MODE=coverage
+
 
 addons:
-   apt:
-      packages:
-         - php-mysql
-         - php-xml
    mariadb: '10.3'
 
 before_install:
@@ -35,10 +37,13 @@ before_install:
    - sudo mysql passings_test < tests/test_data/transponder_records.sql
 
 install:
- - composer install --no-interaction;
+ - composer install --no-interaction
 
 before_script:
  - vendor/bin/phpunit --version
 
 script:
- - vendor/bin/phpunit --no-coverage;
+  - vendor/bin/phpunit
+
+after_script:
+  - bash <(curl -s https://codecov.io/bash)
