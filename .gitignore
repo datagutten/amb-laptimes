@@ -2,7 +2,6 @@
 config*.php
 
 .idea
-composer.lock
 clover.xml
 coverage_html
 .phpunit.result.cache
