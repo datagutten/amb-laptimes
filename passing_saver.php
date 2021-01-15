@@ -5,7 +5,6 @@ use datagutten\amb\parser;
 use datagutten\amb\parser\socket;
 
 require 'vendor/autoload.php';
-$parser=new amb_p3_parser;
 
 
 //Capture data from a AMB decoder using a socket
@@ -57,7 +56,7 @@ while (true)
     if(!isset($decoder_validated))
     {
         try {
-            $record_parsed = $parser->parse($records[0]);
+            $record_parsed = parser\parser::parse($records[0]);
             if (dechex($record_parsed['DECODER_ID']) != $decoder['id'])
                 die(sprintf("Received message from decoder %s, expected %s\n", $record_parsed['DECODER_ID'], $decoder['id']));
             else
@@ -72,7 +71,7 @@ while (true)
 	foreach($records as $record)
 	{
 	    try {
-            $record_parsed = $parser->parse($record, 0x01);
+            $record_parsed = parser\parser::parse($record, 0x01);
         }
         catch (parser\exceptions\AmbParseError $e)
         {
