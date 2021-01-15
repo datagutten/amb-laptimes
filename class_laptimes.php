@@ -36,7 +36,8 @@ class laptimes extends passing_db
 	        throw new UnexpectedValueException('Limit is not numeric');
         //The returned number of passings might be lower than the limit because the limit includes invalid passings
         //TODO: Count and limit rounds instead of passings
-		$passings=$this->db->query(sprintf('SELECT * FROM %s ORDER BY rtc_time DESC LIMIT %d',$this->table, $limit), 'all');
+		$st_passings=$this->db->query(sprintf('SELECT * FROM %s ORDER BY rtc_time DESC LIMIT %d',$this->table, $limit));
+		$passings = $st_passings->fetchAll(PDO::FETCH_ASSOC);
 		$transponders=array_column($passings,'transponder');
 
 		$rounds = [];
@@ -177,7 +178,8 @@ class laptimes extends passing_db
 	function unique_transponders($timestamp_day=false)
 	{
 		$q_todays_transponders=sprintf('SELECT transponder FROM %s WHERE %s GROUP BY transponder ORDER BY rtc_time DESC',$this->table,$this->query_today($timestamp_day)); //Get todays drivers
-		return $this->db->query($q_todays_transponders,'all_column');
+        $st = $this->db->query($q_todays_transponders);
+        return $st->fetchAll(PDO::FETCH_COLUMN);
 	}
 
     /**
@@ -194,7 +196,8 @@ class laptimes extends passing_db
 
 		if(!isset($this->transponders[$transponder]))
 		{
-            $transponder_db = $this->db->execute($st_transponder,array($transponder),'assoc');
+            $st_transponder->execute(array($transponder));
+            $transponder_db = $st_transponder->fetch(PDO::FETCH_ASSOC);
             if(empty($transponder_db))
                 return array();
 			$this->transponders[$transponder]=array_filter($transponder_db);

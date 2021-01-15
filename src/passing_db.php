@@ -51,7 +51,7 @@ class passing_db
 	{
 		$this->st_insert=$this->db->prepare($this->q="INSERT INTO {$this->table} (rtc_time,passing_number,transponder,strength,hits,flags,decoder_id) VALUES (?,?,?,?,?,?,?)");
 		$st_times=$this->db->query("SELECT rtc_time FROM {$this->table}");
-		$this->times_indb=$st_times->fetchAll(PDO::FETCH_COLUMN); //Get all passings already in db	
+		$this->times_indb=$st_times->fetchAll(PDO::FETCH_COLUMN); //Get all passings already in db
 	}
 
     /**
@@ -103,7 +103,8 @@ class passing_db
     function transponders($id_only = false)
     {
         if($id_only) {
-            $transponders = $this->db->query('SELECT transponder_id FROM transponders', 'all_column');
+            $st_transponders = $this->db->query('SELECT transponder_id FROM transponders');
+            $transponders = $st_transponders->fetchAll(PDO::FETCH_COLUMN);
             if (empty($transponders))
                 $transponders = [];
             return $transponders;
