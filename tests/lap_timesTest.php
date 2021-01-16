@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-class laptimesTest extends TestCase
+class lap_timesTest extends TestCase
 {
     function testQueryToday()
     {
