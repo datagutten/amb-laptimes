@@ -1,6 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use datagutten\amb\laps\lap_timing as laptimes;
 
 class lap_timesTest extends TestCase
 {
