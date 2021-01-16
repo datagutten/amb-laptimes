@@ -32,6 +32,11 @@ class passing_db
 	public $table;
 
     /**
+     * @var array Transponders in database
+     */
+	public $transpondersInDB;
+
+    /**
      * passing_db constructor.
      * @param $decoder_id
      * @throws PDOException Database connection failed
