@@ -39,12 +39,14 @@ class mylaps
     }
 
     /**
+     * Get track activities
+     * @param string $mylaps_id MyLaps track ID
      * @return SimpleXMLElement[]
      * @throws MyLapsException
      */
-    function activities()
+    public static function activities(string $mylaps_id)
     {
-        $response = self::get(sprintf('https://speedhive.mylaps.com/Practice/%1$d/PracticeTrackData?id=%1$d', $this->mylaps_id));
+        $response = self::get(sprintf('https://speedhive.mylaps.com/Practice/%1$d/PracticeTrackData?id=%1$d', $mylaps_id));
         $dom=new DOMDocument;
         @$dom->loadHtml($response->body);
         $xml=simplexml_import_dom($dom);
@@ -76,7 +78,7 @@ class mylaps
      * @return array
      * @throws MyLapsException
      */
-    function activity_info($activityId)
+    public static function activity_info($activityId)
     {
         $response = Requests::get(sprintf('https://speedhive.mylaps.com/Practice/%d/Activity', $activityId));
 
