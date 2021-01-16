@@ -56,9 +56,9 @@ foreach($activities as $activity)
         continue;
 
     if(!empty($activity_info['avatar_url'])) {
-        $avatar_file = sprintf('avatars/%s.jpg', $activity_info['transponder_id']);
+        $avatar_folder = __DIR__.'/avatars';
         try {
-            mylaps::download_avatar($activity_info['avatar_url'], $avatar_file);
+            mylaps::download_avatar($activity_info['avatar_url'], $avatar_folder, $activity_info['transponder_id']);
         }
         catch (MyLapsException $e)
         {
