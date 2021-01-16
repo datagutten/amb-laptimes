@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
 
 use datagutten\amb\laps\mylaps;
@@ -9,24 +9,20 @@ class mylapsTest extends TestCase
 
     public function testActivities()
     {
-        $mylaps = new mylaps(238);
-        $activities = $mylaps->activities();
+        $activities = mylaps::activities(238);
         $this->assertTrue(is_array($activities));
     }
 
     public function testActivityId()
     {
-        $mylaps = new mylaps(238);
-        $activities = $mylaps->activities();
+        $activities = mylaps::activities(238);
         $id = mylaps::activity_id($activities[0]);
         $this->assertTrue(is_int($id));
     }
 
     function testActivityInfo()
     {
-        $mylaps = new mylaps(238);
-
-        $activity = $mylaps->activity_info(692252279);
+        $activity = mylaps::activity_info(692252279);
         $this->assertEquals('MR.T', $activity['driver_name']);
         $this->assertEquals('Trygve Berntsen 1-8 Track', $activity['transponder_name']);
         $this->assertEquals(8114139, $activity['transponder_id']);
@@ -35,9 +31,7 @@ class mylapsTest extends TestCase
 
     function testActivityInfoCharset()
     {
-        $mylaps = new mylaps(1865);
-
-        $activity = $mylaps->activity_info(692252467);
+        $activity = mylaps::activity_info(692252467);
         $this->assertEquals('kai rønning', $activity['driver_name'], 'Driver name does not match');
         $this->assertEquals('kai rønning', $activity['transponder_name'], 'Transponder name does not match');
         $this->assertEquals(9784547, $activity['transponder_id']);
@@ -46,9 +40,7 @@ class mylapsTest extends TestCase
 
     function testActivityInfoCarId()
     {
-        $mylaps = new mylaps(238);
-
-        $activity = $mylaps->activity_info(692252350);
+        $activity = mylaps::activity_info(692252350);
         $this->assertEquals('7558082 [0]', $activity['driver_name']);
         $this->assertEquals('7558082 [0]', $activity['transponder_name']);
         $this->assertEquals(7558082, $activity['transponder_id']);
