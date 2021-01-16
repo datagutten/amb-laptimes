@@ -8,6 +8,7 @@ use datagutten\amb\laps\exceptions\MyLapsException;
 use DOMDocument;
 use Requests;
 use Requests_Response;
+use Requests_Session;
 use SimpleXMLElement;
 
 class mylaps
@@ -17,7 +18,7 @@ class mylaps
     function __construct($mylaps_id)
     {
         $this->mylaps_id = $mylaps_id;
-        $this->requests = new \Requests_Session();
+        $this->requests = new Requests_Session();
     }
 
     /**
@@ -47,8 +48,7 @@ class mylaps
         $dom=new DOMDocument;
         @$dom->loadHtml($response->body);
         $xml=simplexml_import_dom($dom);
-        $activities=$xml->xpath("/html/body//a[contains(@href,'Activity')]"); ///@href
-        return $activities;
+        return $xml->xpath("/html/body//a[contains(@href,'Activity')]");
     }
 
     public static function activity_id($activity)
@@ -68,8 +68,7 @@ class mylaps
         $response = Requests::get('https://speedhive.mylaps.com/Export/GetCsv?activityId='.$activityId);
         if(!$response->success)
             throw new MyLapsException(sprintf('HTTP error %d', $response->status_code));
-        $csv=str_replace(chr(0),'',$response->body);
-        return $csv;
+        return str_replace(chr(0),'',$response->body);
     }
 
     /**

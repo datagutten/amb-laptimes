@@ -20,8 +20,7 @@ class laptimes extends passing_db
 			$timestamp_day=time();
 		$time_today_start=strtotime('0:00',$timestamp_day).'000000';
 		$time_today_end=strtotime('23:59',$timestamp_day).'999999';
-		$q=sprintf('rtc_time>=%s AND rtc_time<=%s',$time_today_start,$time_today_end);
-		return $q;
+        return sprintf('rtc_time>=%s AND rtc_time<=%s',$time_today_start,$time_today_end);
 	}
 
     /**

@@ -14,7 +14,7 @@ if(empty($decoders))
     die("Missing decoder config file\n");
 
 if(!isset($argv[1]))
-    die("Usage: passing_saver.php [decoder name]");
+    die(sprintf("Usage: %s [decoder name]", __FILE__));
 if(!isset($decoders[$argv[1]]))
     die("Invalid decoder\n");
 else
