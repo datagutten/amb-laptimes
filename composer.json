@@ -25,8 +25,7 @@
     "autoload": {
         "psr-4": {
             "datagutten\\amb\\laps\\": "src"
-        },
-    "classmap": ["class_laptimes.php"]
+        }
     },
     "bin": ["get_users.php", "passing_saver.php"]
 }
