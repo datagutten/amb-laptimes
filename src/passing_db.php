@@ -38,13 +38,15 @@ class passing_db
 
     /**
      * passing_db constructor.
-     * @param $decoder_id
+     * @param string $decoder_id Decoder ID
+     * @param array $config Database configuration
      * @throws PDOException Database connection failed
      */
-	function __construct($decoder_id)
+	function __construct(string $decoder_id, $config = [])
 	{
 		$this->table='passings_'.$decoder_id;
-        $config = require 'config_db.php';
+		if(empty($config))
+            $config = require 'config_db.php';
 		$this->db = PDOConnectHelper::connect_db_config($config);
 	}
 
