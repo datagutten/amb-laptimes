@@ -1,0 +1,77 @@
+name: PHP Composer
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  version:
+    name: 'PHP version test'
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '8.0' ]
+        os: [ ubuntu-latest, windows-latest ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php${{ matrix.php }}-
+
+      - name: Setup PHP with Xdebug
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: xdebug
+          extensions: sockets, curl
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Setup MySQL
+        run: |
+          sudo systemctl start mysql.service
+          sudo tests/setup_test_database.sh
+
+      - name: Run tests
+        run: vendor/bin/phpunit
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+
+  prefer_lowest:
+    name: 'Prefer lowest dependency versions'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup PHP with Xdebug
+        uses: shivammathur/setup-php@v2
+        with:
+          coverage: xdebug
+          extensions: sockets, curl
+
+      - name: Install dependencies
+        run: composer update --prefer-lowest --no-progress
+
+      - name: Setup MySQL
+        run: |
+          sudo systemctl start mysql.service
+          sudo tests/setup_test_database.sh
+
+      - name: Run tests
+        run: vendor/bin/phpunit
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
