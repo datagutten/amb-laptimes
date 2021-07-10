@@ -8,5 +8,5 @@ $config = require 'test_config.php';
 $db = PDOConnectHelper::connect_db_config($config['db']);
 
 $db->query(file_get_contents(__DIR__ . '/test_data/passings.sql'));
-$db->query(file_get_contents(__DIR__ . '/test_data/transponders.sql'));
+$db->query(file_get_contents(__DIR__ . '/src/transponders.sql'));
 $db->query(file_get_contents(__DIR__ . '/test_data/transponder_records.sql'));
