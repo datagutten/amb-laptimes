@@ -50,7 +50,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           coverage: xdebug
-          extensions: sockets, curl, gd
+          extensions: sockets, curl, gd, pdo_mysql
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
