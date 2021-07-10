@@ -79,6 +79,8 @@ jobs:
 
       - name: Install MariaDB
         uses: ankane/setup-mariadb@v1
+        with:
+          database: ${{ env.DB_DATABASE }}
 
       - name: Install dependencies
         run: composer update --prefer-lowest --no-progress
