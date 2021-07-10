@@ -192,7 +192,7 @@ class lap_timing extends passing_db
      */
 	function unique_transponders($timestamp_day=false)
 	{
-		$q_todays_transponders=sprintf('SELECT transponder FROM %s WHERE %s GROUP BY transponder ORDER BY rtc_time DESC',$this->table,$this->query_today($timestamp_day)); //Get todays drivers
+		$q_todays_transponders=sprintf('SELECT transponder, rtc_time FROM %s WHERE %s GROUP BY transponder ORDER BY rtc_time DESC',$this->table,$this->query_today($timestamp_day)); //Get todays drivers
         $st = $this->db->query($q_todays_transponders);
         return $st->fetchAll(PDO::FETCH_COLUMN);
 	}
