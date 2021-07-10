@@ -75,7 +75,6 @@ jobs:
           extensions: sockets, curl, pdo_mysql
 
       - name: Install MariaDB
-        if: ${{ matrix.db == 'mariadb' }}
         uses: ankane/setup-mariadb@v1
 
       - name: Install dependencies
