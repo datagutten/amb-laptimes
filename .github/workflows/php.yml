@@ -42,7 +42,7 @@ jobs:
       - name: Setup MySQL
         run: |
           sudo systemctl start mysql.service
-          sudo tests/setup_test_database.sh
+          sudo "$(GITHUB_WORKSPACE)/tests/setup_test_database.sh"
 
       - name: Run tests
         run: vendor/bin/phpunit
