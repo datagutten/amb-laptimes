@@ -47,8 +47,11 @@ class passing_db
 		$this->table='passings_'.$decoder_id;
 		if(empty($config))
             $config = require 'config_db.php';
-		$this->db = PDOConnectHelper::connect_db_config($config);
-	}
+
+        $dsn = PDOConnectHelper::build_dsn($config);
+        $this->db = new PDO($dsn, $config['db_user'], $config['db_password']);
+        $this->db->exec("SET sql_mode=(SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''));");
+    }
 
 	function init()
 	{
