@@ -15,6 +15,15 @@ class lap_timesTest extends TestCase
     {
         $config = require __DIR__.'/test_config.php';
         $this->laps = new lap_timing('20f93', $config['db']);
+
+        if (!$this->laps->tableExists('transponders'))
+        {
+            $this->laps->db->query(file_get_contents(__DIR__ . '/../src/transponders.sql'));
+            $this->laps->db->query(file_get_contents(__DIR__ . '/test_data/transponder_records.sql'));
+        }
+
+        if (!$this->laps->tableExists('passings_20f93'))
+            $this->laps->db->query(file_get_contents(__DIR__ . '/test_data/passings.sql'));
     }
 
     function testQueryToday()

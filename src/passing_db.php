@@ -35,6 +35,14 @@ class passing_db
      * @var array Transponders in database
      */
 	public $transpondersInDB;
+    /**
+     * @var string Database name
+     */
+    protected $db_name;
+    /**
+     * @var string|null Decoder ID
+     */
+    public $decoder_id;
 
     /**
      * passing_db constructor.
@@ -48,6 +56,8 @@ class passing_db
         $dsn = PDOConnectHelper::build_dsn($config);
         $this->db = new PDO($dsn, $config['db_user'], $config['db_password']);
         $this->db->exec("SET sql_mode=(SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''));");
+        $this->db_name = $config['db_name'];
+        $this->decoder_id = $decoder_id;
     }
 
 	function init()
@@ -56,6 +66,8 @@ class passing_db
 		$this->st_insert=$this->db->prepare($query);
 		$st_times=$this->db->query("SELECT rtc_time FROM {$this->table}");
 		$this->times_indb=$st_times->fetchAll(PDO::FETCH_COLUMN); //Get all passings already in db
+        if(!$this->tableExists($this->table))
+            $this->create_table($this->decoder_id);
 	}
 
     /**
@@ -66,6 +78,22 @@ class passing_db
         $this->st_insert_transponder = $this->db->prepare('INSERT INTO transponders (transponder_id, transponder_name, nickname) VALUES (?,?,?)');
         $this->st_update_transponder = $this->db->prepare('UPDATE transponders SET transponder_name=?, nickname=? WHERE transponder_id=?');
         $this->transpondersInDB = $this->transponders(true);
+    }
+
+    /**
+     * Check if a table exists
+     * @param string $table Table name
+     * @return bool
+     */
+    public function tableExists(string $table): bool
+    {
+        $q = 'SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA=? AND TABLE_NAME=?';
+        $st = $this->db->prepare($q);
+        $st->execute(array($this->db_name, $table));
+        if ($st->rowCount() === 0)
+            return false;
+        else
+            return true;
     }
 
     /**
