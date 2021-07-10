@@ -25,6 +25,9 @@ jobs:
           host port: 3800
           mysql database: 'passings_test'
           mysql version: '5.7'
+      - run: |
+          sudo mysql -e 'CREATE DATABASE passings_test'
+          sudo mysql -e 'GRANT ALL PRIVILEGES ON `passings_test`.* TO "php_test"@"localhost" IDENTIFIED BY "password";'
 
       - uses: actions/checkout@v2
 
