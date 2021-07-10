@@ -23,9 +23,9 @@ jobs:
         db: [ mariadb, mysql ]
         composer_command: [ composer install --prefer-dist --no-progress ]
         include:
-          - php: 7.1
+          - php: '7.1'
             composer_command: [ composer update --prefer-dist --no-progress ]
-          - php: 7.2
+          - php: '7.2'
             composer_command: [ composer update --prefer-dist --no-progress ]
 
     steps:
