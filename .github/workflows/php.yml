@@ -26,6 +26,7 @@ jobs:
           mysql database: 'passings_test'
           mysql version: '5.7'
       - run: |
+          sudo systemctl start mysql.service
           sudo mysql -e 'CREATE DATABASE passings_test'
           sudo mysql -e 'GRANT ALL PRIVILEGES ON `passings_test`.* TO "php_test"@"localhost" IDENTIFIED BY "password";'
 
@@ -67,7 +68,7 @@ jobs:
       - name: Setup MySQL
         run: |
           sudo systemctl start mysql.service
-          sudo tests/setup_test_database.sh
+          php tests/setup.php
 
       - name: Run tests
         run: vendor/bin/phpunit
