@@ -7,14 +7,14 @@ use datagutten\amb\laps\lap_timing as laptimes;
 class lap_timesTest extends TestCase
 {
     /**
-     * @var laptimes
+     * @var lap_timing
      */
     protected $laps;
 
     public function setUp(): void
     {
-        $config = require __DIR__.'/test_config_db.php';
-        $this->laps = new lap_timing('20f93', $config);
+        $config = require __DIR__.'/test_config.php';
+        $this->laps = new lap_timing('20f93', $config['db']);
     }
 
     function testQueryToday()

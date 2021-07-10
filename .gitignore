@@ -1,5 +1,5 @@
 /vendor/
-config*.php
+/config.php
 
 .idea
 clover.xml

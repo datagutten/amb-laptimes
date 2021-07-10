@@ -6,12 +6,14 @@ use datagutten\amb\laps\passing_db;
 
 require 'vendor/autoload.php';
 
-$passing_db = new passing_db('');
-$db = $passing_db->db;
 
-$decoders = @include 'config_decoders.php';
-if(empty($decoders))
-    die("Missing decoder config file\n");
+
+$config = require 'config.php';
+if (empty($config['decoders']))
+    die("Missing decoder key in config file\n");
+$passing_db = new passing_db('', $config['db']);
+
+$decoders = $config['decoders'];
 
 if(!isset($argv[1]))
     die(sprintf("Usage: %s [decoder name]", __FILE__));

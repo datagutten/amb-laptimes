@@ -6,10 +6,20 @@ use PHPUnit\Framework\TestCase;
 
 class passing_dbTest extends TestCase
 {
+    /**
+     * @var passing_db
+     */
+    private $passings;
+
+    public function setUp(): void
+    {
+        $config = require __DIR__.'/test_config.php';
+        $this->passings = new passing_db('test_decoder', $config['db']);
+    }
+
     public function testCreate_table()
     {
-        set_include_path(__DIR__);
-        $passings = new passing_db('test_decoder');
+        $passings = $this->passings;
         $passings->create_table('test_decoder');
 
         try {
@@ -27,8 +37,7 @@ class passing_dbTest extends TestCase
 
     public function testInsert()
     {
-        set_include_path(__DIR__);
-        $passings = new passing_db('test_decoder');
+        $passings = $this->passings;
         try {
             $passings->create_table('test_decoder');
             $passings->init();
@@ -59,16 +68,14 @@ class passing_dbTest extends TestCase
 
     public function testTransponders()
     {
-        set_include_path(__DIR__);
-        $passings = new passing_db('test_decoder');
+        $passings = $this->passings;
         $transponders = $passings->transponders(true);
         $this->assertTrue(is_array($transponders));
     }
 
     public function testTransponders2()
     {
-        set_include_path(__DIR__);
-        $passings = new passing_db('test_decoder');
+        $passings = $this->passings;
         $transponders = $passings->transponders();
         $this->assertInstanceOf('PDOStatement', $transponders);
     }

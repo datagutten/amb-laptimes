@@ -9,16 +9,16 @@ require 'vendor/autoload.php';
 
 //Capture data from a AMB decoder using a socket
 
-$decoders = @include 'config_decoders.php';
-if(empty($decoders))
-    die("Missing decoder config file\n");
+$config = require 'config.php';
+if (empty($config['decoders']))
+    die("Missing decoder key in config file\n");
 
 if(!isset($argv[1]))
     die("Usage: passing_saver.php [decoder name]");
-if(!isset($decoders[$argv[1]]))
+if(!isset($config['decoders'][$argv[1]]))
     die("Invalid decoder\n");
 else
-    $decoder = $decoders[$argv[1]];
+    $decoder = $config['decoders'][$argv[1]];
 
 $debug = isset($argv[2]);
 
@@ -29,16 +29,12 @@ if(!isset($decoder['port']))
 
 try {
     $socket = new socket($decoder['address'], $decoder['port']);
-    $db = new passing_db($decoder['id']);
+    $db = new passing_db($decoder['id'], $config['db']);
     $db->init();
 }
 catch (parser\exceptions\ConnectionError $e)
 {
     die($e->getMessage()."\n");
-}
-catch (FileNotFoundException $e)
-{
-    die("Missing database configuration file\n");
 }
 
 while (true) 
