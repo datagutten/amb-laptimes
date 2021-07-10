@@ -8,19 +8,10 @@ use datagutten\amb\laps\exceptions\MyLapsException;
 use DOMDocument;
 use Requests;
 use Requests_Response;
-use Requests_Session;
 use SimpleXMLElement;
 
 class mylaps
 {
-    public $mylaps_id;
-    public $requests;
-    function __construct($mylaps_id)
-    {
-        $this->mylaps_id = $mylaps_id;
-        $this->requests = new Requests_Session();
-    }
-
     /**
      * HTTP Get request
      * @param string $url

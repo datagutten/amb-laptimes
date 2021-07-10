@@ -22,11 +22,10 @@ if(!isset($decoders[$argv[1]]))
 else
     $decoder = $decoders[$argv[1]];
 
-$data=file_get_contents(sprintf('https://speedhive.mylaps.com/Practice/%1$d/PracticeTrackData?id=%1$d', $decoder['mylaps_id']));
-$mylaps = new mylaps($decoder['mylaps_id']);
+$mylaps = new mylaps();
 
 try {
-    $activities = $mylaps->activities();
+    $activities = mylaps::activities($decoder['mylaps_id']);
 }
 catch (MyLapsException $e)
 {
