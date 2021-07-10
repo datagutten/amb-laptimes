@@ -27,8 +27,8 @@ jobs:
           mysql version: '5.7'
       - run: |
           sudo systemctl start mysql.service
-          sudo mysql -e 'CREATE DATABASE passings_test'
-          sudo mysql -e 'GRANT ALL PRIVILEGES ON `passings_test`.* TO "php_test"@"localhost" IDENTIFIED BY "password";'
+          sudo mysql -e 'CREATE DATABASE passings_test' -p root
+          sudo mysql -e 'GRANT ALL PRIVILEGES ON `passings_test`.* TO "php_test"@"localhost" IDENTIFIED BY "password";' -p root
 
       - uses: actions/checkout@v2
 
