@@ -24,18 +24,21 @@ jobs:
         db: [ mariadb, mysql ]
 
     steps:
-      - name: Install MySQL
-        if: ${{ runner.os == 'Windows' }}
+      - name: Install MariaDB
+        if: ${{ runner.os == 'Windows' and matrix.db == 'mariadb' }}
         run: |
           choco install ${{ matrix.db }} --no-progress
-          mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';"
+
+      - name: Install MySQL
+        if: ${{ runner.os == 'Windows' and matrix.db == 'mysql' }}
+        uses: ankane/setup-mysql@v1
 
       - name: Install MariaDB
         if: ${{ runner.os == 'Linux' && matrix.db == 'mariadb' }}
         uses: ankane/setup-mariadb@v1
 
       - name: Set password
-        if: ${{ runner.os == 'Linux' && matrix.db == 'mariadb' }}
+        if: ${{ matrix.db == 'mariadb' || (runner.os == 'Linux' && matrix.db == 'mysql') }}
         run: mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';"
 
       - name: Start MySQL
