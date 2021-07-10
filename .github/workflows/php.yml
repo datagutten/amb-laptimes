@@ -51,13 +51,15 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           coverage: xdebug
-          extensions: sockets, curl
+          extensions: sockets, curl, pdo_mysql
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
       - name: Setup database
-        run: php tests/setup.php
+        run: |
+          mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';"
+          php tests/setup.php
 
       - name: Run tests
         run: vendor/bin/phpunit
@@ -73,19 +75,18 @@ jobs:
       - name: Setup PHP with Xdebug
         uses: shivammathur/setup-php@v2
         with:
-          coverage: xdebug
-          extensions: sockets, curl
+          extensions: sockets, curl, pdo_mysql
+
+      - name: Install MariaDB
+        uses: ankane/setup-mariadb@v1
 
       - name: Install dependencies
         run: composer update --prefer-lowest --no-progress
 
-      - name: Setup MySQL
+      - name: Setup database
         run: |
-          sudo systemctl start mysql.service
-          sudo tests/setup_test_database.sh
+          mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';"
+          php tests/setup.php
 
       - name: Run tests
         run: vendor/bin/phpunit
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
