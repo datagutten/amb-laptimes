@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - name: Start MySQL
-        if: ${{ matrix.os == 'Linux' }}
+        if: ${{ runner.os == 'Linux' }}
         run: sudo /etc/init.d/mysql start
       - name: Set up MySQL
         run: |
