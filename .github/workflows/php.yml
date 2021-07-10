@@ -26,7 +26,8 @@ jobs:
       - name: Install MySQL
         if: ${{ runner.os == 'Windows' }}
         run: |
-          choco install mariadb
+          choco install mariadb --no-progress
+          mysqladmin -u root password root
 
       - name: Start MySQL
         if: ${{ runner.os == 'Linux' }}
