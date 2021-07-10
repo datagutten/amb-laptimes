@@ -25,12 +25,12 @@ jobs:
 
     steps:
       - name: Install MariaDB
-        if: ${{ runner.os == 'Windows' and matrix.db == 'mariadb' }}
+        if: ${{ runner.os == 'Windows' && matrix.db == 'mariadb' }}
         run: |
           choco install ${{ matrix.db }} --no-progress
 
       - name: Install MySQL
-        if: ${{ runner.os == 'Windows' and matrix.db == 'mysql' }}
+        if: ${{ runner.os == 'Windows' && matrix.db == 'mysql' }}
         uses: ankane/setup-mysql@v1
 
       - name: Install MariaDB
