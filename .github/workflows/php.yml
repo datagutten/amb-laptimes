@@ -23,6 +23,11 @@ jobs:
         os: [ ubuntu-latest, windows-latest ]
 
     steps:
+      - name: Install MySQL
+        if: ${{ runner.os == 'Windows' }}
+        run: |
+          choco install mariadb
+
       - name: Start MySQL
         if: ${{ runner.os == 'Linux' }}
         run: sudo /etc/init.d/mysql start
