@@ -28,7 +28,7 @@ jobs:
         if: ${{ runner.os == 'Windows' }}
         run: |
           choco install ${{ matrix.db }} --no-progress
-          mysqladmin -u root password root
+          mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';"
 
       - name: Start MySQL
         if: ${{ runner.os == 'Linux' }}
