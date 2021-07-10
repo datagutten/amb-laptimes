@@ -60,9 +60,7 @@ jobs:
         run: composer install --prefer-dist --no-progress
 
       - name: Setup database
-        run: |
-          mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';"
-          php tests/setup.php
+        run: mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';"
 
       - name: Run tests
         run: vendor/bin/phpunit
@@ -89,9 +87,7 @@ jobs:
         run: composer update --prefer-lowest --no-progress
 
       - name: Setup database
-        run: |
-          mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';"
-          php tests/setup.php
+        run: mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';"
 
       - name: Run tests
         run: vendor/bin/phpunit
