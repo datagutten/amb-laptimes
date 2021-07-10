@@ -35,9 +35,6 @@ jobs:
       - name: Start MySQL
         if: ${{ runner.os == 'Linux' }}
         run: sudo /etc/init.d/mysql start
-      - name: Set up MySQL
-        run: |
-          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
 
       - uses: actions/checkout@v2
 
@@ -54,6 +51,7 @@ jobs:
       - name: Setup database
         run: |
           mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';"
+          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
           php tests/setup.php
 
       - name: Run tests
