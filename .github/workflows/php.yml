@@ -32,9 +32,11 @@ jobs:
 
       - name: Install MariaDB
         if: ${{ runner.os == 'Linux' && matrix.db == 'mariadb' }}
-        run: |
-          sudo apt-get install mariadb-server
-          mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';"
+        uses: ankane/setup-mariadb@v1
+
+      - name: Set password
+        if: ${{ runner.os == 'Linux' && matrix.db == 'mariadb' }}
+        run: mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';"
 
       - name: Start MySQL
         if: ${{ runner.os == 'Linux' }}
