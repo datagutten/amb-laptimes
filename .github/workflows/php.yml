@@ -18,6 +18,14 @@ jobs:
         os: [ ubuntu-latest, windows-latest ]
 
     steps:
+      - name: Setup MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql root password: root
+          host port: 3800
+          mysql database: 'passings_test'
+          mysql version: '5.7'
+
       - uses: actions/checkout@v2
 
       - name: Cache Composer packages
@@ -39,10 +47,8 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
-      - name: Setup MySQL
-        run: |
-          sudo systemctl start mysql.service
-          sudo "${{ env.GITHUB_WORKSPACE }}/tests/setup_test_database.sh"
+      - name: Setup database
+        run: php tests/setup.php
 
       - name: Run tests
         run: vendor/bin/phpunit
