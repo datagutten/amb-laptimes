@@ -16,9 +16,9 @@ class lap_timing extends passing_db
 	public $previous_round;
 	public $transponders;
 
-    function __construct($decoder_id, $config)
+    function __construct(array $config, string $decoder_id = null)
 	{
-        parent::__construct($decoder_id, $config);
+        parent::__construct($config, $decoder_id);
 		date_default_timezone_set('GMT');
 	}
 	public static function query_today($timestamp_day=false)

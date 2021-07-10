@@ -14,7 +14,8 @@ class passing_dbTest extends TestCase
     public function setUp(): void
     {
         $config = require __DIR__.'/test_config.php';
-        $this->passings = new passing_db('test_decoder', $config['db']);
+        $this->passings = new passing_db($config['db'], 'test_decoder');
+
 
         $this->passings->db->query('DROP TABLE IF EXISTS transponders');
         $this->passings->db->query('DROP TABLE IF EXISTS passings_test_decoder');

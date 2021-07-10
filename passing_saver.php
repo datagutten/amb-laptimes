@@ -29,7 +29,7 @@ if(!isset($decoder['port']))
 
 try {
     $socket = new socket($decoder['address'], $decoder['port']);
-    $db = new passing_db($decoder['id'], $config['db']);
+    $db = new passing_db($config['db'], $decoder['id']);
     $db->init();
 }
 catch (parser\exceptions\ConnectionError $e)

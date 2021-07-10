@@ -46,13 +46,14 @@ class passing_db
 
     /**
      * passing_db constructor.
-     * @param string $decoder_id Decoder ID
      * @param array $config Configuration
+     * @param string|null $decoder_id Decoder ID
      * @throws PDOException Database connection failed
      */
-	function __construct(string $decoder_id, array $config)
+    function __construct(array $config, string $decoder_id = null)
 	{
-		$this->table='passings_'.$decoder_id;
+	    if(!empty($decoder_id))
+		    $this->table='passings_'.$decoder_id;
         $dsn = PDOConnectHelper::build_dsn($config);
         $this->db = new PDO($dsn, $config['db_user'], $config['db_password']);
         $this->db->exec("SET sql_mode=(SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''));");
