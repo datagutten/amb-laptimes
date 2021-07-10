@@ -32,9 +32,6 @@ jobs:
         if: ${{ matrix.db == 'mariadb' }}
         uses: ankane/setup-mariadb@v1
 
-      - name: Set password
-        run: mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';"
-
       - name: Start MySQL
         if: ${{ runner.os == 'Linux' }}
         run: sudo /etc/init.d/mysql start
@@ -55,7 +52,9 @@ jobs:
         run: composer install --prefer-dist --no-progress
 
       - name: Setup database
-        run: php tests/setup.php
+        run: |
+          mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';"
+          php tests/setup.php
 
       - name: Run tests
         run: vendor/bin/phpunit
@@ -81,7 +80,10 @@ jobs:
         run: composer update --prefer-lowest --no-progress
 
       - name: Setup database
-        run: php tests/setup.php
+        run: |
+          mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';"
+          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
+          php tests/setup.php
 
       - name: Run tests
         run: vendor/bin/phpunit
