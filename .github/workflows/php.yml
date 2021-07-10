@@ -1,4 +1,8 @@
 name: PHP Composer
+env:
+  DB_DATABASE: test_db
+  DB_USER: root
+  DB_PASSWORD: root
 
 on:
   push:
@@ -8,11 +12,6 @@ on:
 
 jobs:
   version:
-    env:
-      DB_DATABASE: test_db
-      DB_USER: root
-      DB_PASSWORD: root
-
     name: 'PHP version test'
     runs-on: ${{ matrix.os }}
 
