@@ -18,13 +18,6 @@ jobs:
         os: [ ubuntu-latest, windows-latest ]
 
     steps:
-      - name: Setup MySQL
-        uses: mirromutth/mysql-action@v1.1
-        with:
-          mysql root password: root
-          host port: 3800
-          mysql database: 'passings_test'
-          mysql version: '5.7'
       - run: |
           sudo systemctl start mysql.service
           sudo mysql -e 'CREATE DATABASE passings_test' -p root
