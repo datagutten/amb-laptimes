@@ -5,7 +5,7 @@
     "license": "GPL-3.0-or-later",
     "require": {
         "php": ">=7.1",
-        "datagutten/tools": "dev-master",
+        "datagutten/tools": "^1.9",
         "datagutten/amb-p3-parser": "^2.0",
         "ext-json": "*",
         "ext-pdo": "*",
