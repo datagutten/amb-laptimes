@@ -21,6 +21,12 @@ jobs:
         php: [ '7.1', '7.2', '7.3', '7.4', '8.0' ]
         os: [ ubuntu-latest, windows-latest ]
         db: [ mariadb, mysql ]
+        composer_command: [ composer install --prefer-dist --no-progress ]
+        include:
+          - php: 7.1
+            composer_command: [ composer update --prefer-dist --no-progress ]
+          - php: 7.2
+            composer_command: [ composer update --prefer-dist --no-progress ]
 
     steps:
       - name: Install MySQL
@@ -54,7 +60,7 @@ jobs:
           extensions: sockets, curl, pdo_mysql
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
+        run: $ {{ matrix.composer_command }}
 
       - name: Setup database
         run: |
