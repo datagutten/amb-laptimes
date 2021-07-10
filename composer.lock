@@ -53,22 +53,20 @@
         },
         {
             "name": "datagutten/tools",
-            "version": "v1.10",
+            "version": "v1.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/datagutten/tools.git",
-                "reference": "fc1f490dd93963fb9e1ff74c27ee1a79b7d8ba6e"
+                "reference": "2edbb646049e9e071a2b58764fcb108a6739fb41"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/datagutten/tools/zipball/fc1f490dd93963fb9e1ff74c27ee1a79b7d8ba6e",
-                "reference": "fc1f490dd93963fb9e1ff74c27ee1a79b7d8ba6e",
+                "url": "https://api.github.com/repos/datagutten/tools/zipball/2edbb646049e9e071a2b58764fcb108a6739fb41",
+                "reference": "2edbb646049e9e071a2b58764fcb108a6739fb41",
                 "shasum": ""
             },
             "require": {
-                "ext-gd": "*",
-                "ext-pdo": "*",
-                "ext-simplexml": "*"
+                "php": ">=7.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9|^8.4|^7|^6|^5.7",
@@ -98,9 +96,9 @@
             "description": "Tools used in my projects",
             "support": {
                 "issues": "https://github.com/datagutten/tools/issues",
-                "source": "https://github.com/datagutten/tools/tree/v1.10"
+                "source": "https://github.com/datagutten/tools/tree/v1.10.1"
             },
-            "time": "2020-12-27T19:28:32+00:00"
+            "time": "2021-06-20T10:57:38+00:00"
         },
         {
             "name": "rmccue/requests",
