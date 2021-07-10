@@ -72,15 +72,17 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           coverage: xdebug
-          extensions: sockets, curl
+          extensions: sockets, curl, pdo_mysql
+
+      - name: Install MariaDB
+        if: ${{ matrix.db == 'mariadb' }}
+        uses: ankane/setup-mariadb@v1
 
       - name: Install dependencies
         run: composer update --prefer-lowest --no-progress
 
-      - name: Setup MySQL
-        run: |
-          sudo systemctl start mysql.service
-          php tests/setup.php
+      - name: Setup database
+        run: php tests/setup.php
 
       - name: Run tests
         run: vendor/bin/phpunit
