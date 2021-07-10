@@ -1,4 +1,8 @@
 name: PHP Composer
+env:
+  DB_DATABASE: test_db
+  DB_USER: root
+  DB_PASSWORD: root
 
 on:
   push:
@@ -16,15 +20,20 @@ jobs:
       matrix:
         php: [ '8.0' ]
         os: [ ubuntu-latest, windows-latest ]
+        db: [ mariadb, mysql ]
 
     steps:
-      - name: Setup MySQL
-        uses: mirromutth/mysql-action@v1.1
+      - name: Install MySQL
+        if: ${{ matrix.db == 'mysql' }}
+        uses: ankane/setup-mysql@v1
         with:
-          mysql root password: root
-          host port: 3800
-          mysql database: 'passings_test'
-          mysql version: '5.7'
+          database: ${{ env.DB_DATABASE }}
+
+      - name: Install MariaDB
+        if: ${{ matrix.db == 'mariadb' }}
+        uses: ankane/setup-mariadb@v1
+        with:
+          database: ${{ env.DB_DATABASE }}
 
       - uses: actions/checkout@v2
 
