@@ -71,4 +71,13 @@ class passing_dbTest extends TestCase
         $transponders = $this->passings->transponders();
         $this->assertInstanceOf('PDOStatement', $transponders);
     }
+
+    public function testSaveTransponder()
+    {
+        $st = $this->passings->db->query('SELECT * FROM transponders WHERE transponder_id=2583246');
+        $this->assertEquals(0, $st->rowCount());
+        $this->passings->save_transponder(['transponder_id' => 2583246, 'transponder_name' => 'Xray Xb2 2019', 'driver_name' => 'Steffler']);
+        $st = $this->passings->db->query('SELECT * FROM transponders WHERE transponder_id=2583246');
+        $this->assertEquals(1, $st->rowCount());
+    }
 }
