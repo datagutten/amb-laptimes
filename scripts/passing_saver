@@ -1,10 +1,15 @@
+#!/usr/bin/php
 <?Php
 
 use datagutten\amb\laps\passing_db;
 use datagutten\amb\parser;
 use datagutten\amb\parser\socket;
 
-require 'vendor/autoload.php';
+if(file_exists(__DIR__.'/../../../autoload.php'))
+    /** @noinspection PhpIncludeInspection */
+    require __DIR__.'/../../../autoload.php';
+else
+    require __DIR__.'/../vendor/autoload.php';
 
 
 //Capture data from a AMB decoder using a socket
