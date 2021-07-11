@@ -21,8 +21,8 @@ class lap_timing extends passing_db
         parent::__construct($config, $decoder_id);
 		date_default_timezone_set('GMT');
 	}
-	public static function query_today($timestamp_day=false)
-	{
+	public static function query_today($timestamp_day=false): string
+    {
         date_default_timezone_set('GMT');
 		if($timestamp_day===false)
 			$timestamp_day=time();
@@ -37,7 +37,7 @@ class lap_timing extends passing_db
      * @param int $limit
      * @return int Round time in seconds
      */
-    public static function lap_time($passing1, $passing2, $limit = 60)
+    public static function lap_time(array $passing1, array $passing2, $limit = 60)
     {
         $round_time=$passing2['rtc_time']-$passing1['rtc_time']; //Calculate lap time
         $round_time_seconds=$round_time/pow(1000,2); //Convert lap time to seconds
@@ -53,7 +53,7 @@ class lap_timing extends passing_db
      * @param int $time
      * @return int
      */
-    public static function convert_time($time)
+    public static function convert_time(int $time): int
     {
         return intval($time/pow(1000,2));
     }
@@ -66,7 +66,7 @@ class lap_timing extends passing_db
      * @return array
      * @throws PDOException Database error
      */
-    function laps($lap_count_limit = 90, $lap_time_limit = 60, $time_before = 0)
+    function laps($lap_count_limit = 90, $lap_time_limit = 60, $time_before = 0): array
     {
         if (!is_numeric($lap_count_limit))
             throw new UnexpectedValueException('Lap count limit is not numeric');
@@ -127,8 +127,8 @@ class lap_timing extends passing_db
      * @param bool $save_debug_info Save files with debug information
      * @return array Argument array with added values for CSS class and best time
      */
-	function stats($rounds, $save_debug_info = false)
-	{
+	function stats(array $rounds, $save_debug_info = false): array
+    {
 		$reverse_rounds=array_reverse($rounds,true);
 		//First round has highest key
 		foreach($reverse_rounds as $key=>$round) //First round first
@@ -190,8 +190,8 @@ class lap_timing extends passing_db
      * @param bool $timestamp_day
      * @return array Unique transponder numbers
      */
-	function unique_transponders($timestamp_day=false)
-	{
+	function unique_transponders($timestamp_day=false): array
+    {
 		$q_todays_transponders=sprintf('SELECT transponder FROM %s WHERE %s GROUP BY transponder ORDER BY rtc_time DESC',$this->table,$this->query_today($timestamp_day)); //Get todays drivers
         $st = $this->db->query($q_todays_transponders);
         return $st->fetchAll(PDO::FETCH_COLUMN);
@@ -202,8 +202,8 @@ class lap_timing extends passing_db
      * @param string $transponder Transponder number
      * @return array
      */
-	function transponder_info($transponder)
-	{
+	function transponder_info(string $transponder): array
+    {
 		if(empty($transponder))
 			throw new InvalidArgumentException('Transponder empty');
 

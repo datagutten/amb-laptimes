@@ -21,7 +21,7 @@ class mylaps
      * @return Requests_Response
      * @throws MyLapsException
      */
-    public static function get($url, $headers = [], $options = [])
+    public static function get(string $url, $headers = [], $options = []): Requests_Response
     {
         $response = Requests::get($url, $headers, $options);
         if(!$response->success)
@@ -36,7 +36,7 @@ class mylaps
      * @return SimpleXMLElement[]
      * @throws MyLapsException
      */
-    public static function activities(string $mylaps_id)
+    public static function activities(string $mylaps_id): array
     {
         $response = self::get(sprintf('https://speedhive.mylaps.com/Practice/%1$d/PracticeTrackData?id=%1$d', $mylaps_id));
         $dom=new DOMDocument;
@@ -45,7 +45,7 @@ class mylaps
         return $xml->xpath("/html/body//a[contains(@href,'Activity')]");
     }
 
-    public static function activity_id($activity)
+    public static function activity_id($activity): int
     {
         $href=(string)$activity->attributes()['href'];
         $activityId=preg_replace('#/Practice/([0-9]+)/Activity#','$1',$href);
@@ -70,7 +70,7 @@ class mylaps
      * @return array
      * @throws MyLapsException
      */
-    public static function activity_info($activityId)
+    public static function activity_info($activityId): array
     {
         $response = Requests::get(sprintf('https://speedhive.mylaps.com/Practice/%d/Activity', $activityId));
 
@@ -109,7 +109,7 @@ class mylaps
      * @return string Avatar file with extension
      * @throws AvatarDownloadError
      */
-    public static function download_avatar($avatar_url, $avatar_folder, $transponder_id)
+    public static function download_avatar(string $avatar_url, string $avatar_folder, int $transponder_id): string
     {
         $response = Requests::head($avatar_url);
         if(!$response->success)
@@ -133,7 +133,7 @@ class mylaps
      * @return int|void
      * @throws MyLapsException
      */
-    public static function transponder_id($activityId)
+    public static function transponder_id(int $activityId): int
     {
         $csv = self::activity_csv($activityId);
 

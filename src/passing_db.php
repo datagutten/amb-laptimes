@@ -124,7 +124,7 @@ class passing_db
      * Insert parsed passing record into database
      * @param array $record_parsed Parsed passing record
      */
-    function insert($record_parsed)
+    function insert(array $record_parsed)
     {
         if(array_search($record_parsed['RTC_TIME'],$this->times_indb)!==false)
             return;
@@ -153,9 +153,9 @@ class passing_db
 
     /**
      * Save transponder info in the database
-     * @param $activity_info
+     * @param array $activity_info
      */
-    function save_transponder($activity_info)
+    function save_transponder(array $activity_info)
     {
         if(empty($this->transpondersInDB))
             $this->init_transponders();
