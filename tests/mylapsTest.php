@@ -2,10 +2,24 @@
 
 
 use datagutten\amb\laps\mylaps;
+use datagutten\amb\laps\passing_db;
 use PHPUnit\Framework\TestCase;
 
 class mylapsTest extends TestCase
 {
+    /**
+     * @var string Avatar folder path
+     */
+    private $avatar_folder;
+
+    public function setUp(): void
+    {
+        $filesystem = new Symfony\Component\Filesystem\Filesystem();
+        $this->avatar_folder = sys_get_temp_dir().'/avatar_test';
+        if(file_exists($this->avatar_folder))
+            $filesystem->remove($this->avatar_folder);
+        mkdir($this->avatar_folder);
+    }
 
     public function testActivities()
     {
@@ -54,12 +68,22 @@ class mylapsTest extends TestCase
 
     public function testDownloadAvatar()
     {
-        $avatar_folder = sys_get_temp_dir().'/avatar_test';
-        mkdir($avatar_folder);
-        $avatar_file = mylaps::download_avatar('https://speedhive.mylaps.com/Images/MYLAPS-GA-66c5a32dc0344fce946b0e8f6262dbff/1', $avatar_folder, 2583246);
+        $avatar_file = mylaps::download_avatar('https://speedhive.mylaps.com/Images/MYLAPS-GA-66c5a32dc0344fce946b0e8f6262dbff/1', $this->avatar_folder, 2583246);
         $this->assertFileExists($avatar_file);
         $this->assertGreaterThan(0, filesize($avatar_file));
-        unlink($avatar_file);
-        rmdir($avatar_folder);
+    }
+
+    public function testSave_transponder_info()
+    {
+        $mylaps = new mylaps();
+        $config = require __DIR__.'/test_config.php';
+        $passings = new passing_db($config['db']);
+        $passings->db->query('DROP TABLE IF EXISTS transponders');
+
+        $mylaps->save_transponder_info(238, $this->avatar_folder, $passings);
+        $this->assertTrue($passings->tableExists('transponders'));
+        $transponders = $passings->transponders(true);
+        $this->assertIsArray($transponders);
+        $this->assertGreaterThan(2, count($transponders));
     }
 }
