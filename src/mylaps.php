@@ -8,6 +8,7 @@ use datagutten\amb\laps\exceptions\AvatarDownloadError;
 use datagutten\amb\laps\exceptions\MyLapsException;
 use DOMDocument;
 use Requests;
+use Requests_Exception;
 use Requests_Response;
 use SimpleXMLElement;
 
@@ -23,7 +24,16 @@ class mylaps
      */
     public static function get(string $url, $headers = [], $options = []): Requests_Response
     {
-        $response = Requests::get($url, $headers, $options);
+        try
+        {
+            $response = Requests::get($url, $headers, $options);
+        }
+            /** @noinspection PhpRedundantCatchClauseInspection */
+        catch (Requests_Exception $e)
+        {
+            throw new MyLapsException('Error from requests: ' . $e->getMessage(), 0, $e);
+        }
+
         if(!$response->success)
             throw new MyLapsException(sprintf('HTTP error %d', $response->status_code));
         else
@@ -59,9 +69,7 @@ class mylaps
      */
     public static function activity_csv($activityId)
     {
-        $response = Requests::get('https://speedhive.mylaps.com/Export/GetCsv?activityId='.$activityId);
-        if(!$response->success)
-            throw new MyLapsException(sprintf('HTTP error %d', $response->status_code));
+        $response = self::get('https://speedhive.mylaps.com/Export/GetCsv?activityId='.$activityId);
         return str_replace(chr(0),'',$response->body);
     }
 
@@ -72,7 +80,7 @@ class mylaps
      */
     public static function activity_info($activityId): array
     {
-        $response = Requests::get(sprintf('https://speedhive.mylaps.com/Practice/%d/Activity', $activityId));
+        $response = self::get(sprintf('https://speedhive.mylaps.com/Practice/%d/Activity', $activityId));
 
         preg_match('#class="user-avatar" src="/(.+?)"#', $response->body, $avatar);
         if(!empty($avatar))
@@ -121,9 +129,15 @@ class mylaps
             throw new AvatarDownloadError('Unable to determine extension for MIME type '.$type);
 
         $avatar_file = sprintf('%s/%d.%s',$avatar_folder, $transponder_id, $extension);
-        $response = Requests::get($avatar_url, [], ['filename'=>$avatar_file]);
-        if(!file_exists($avatar_file) || !$response->success)
-            throw new AvatarDownloadError(sprintf('Avatar download error, HTTP status %d', $response->status_code));
+        try
+        {
+            self::get($avatar_url, [], ['filename' => $avatar_file]);
+        }
+        catch (MyLapsException $e)
+        {
+            throw new AvatarDownloadError(
+                sprintf('Avatar download error: %s', $e->getMessage()), 0, $e);
+        }
 
         return $avatar_file;
     }
