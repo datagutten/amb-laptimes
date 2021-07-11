@@ -26,14 +26,10 @@ class passing_dbTest extends TestCase
 
     public function testCreate_table()
     {
-        try {
-            $st = $this->passings->db->query('SELECT * FROM passings_test_decoder');
-            $this->assertEquals(0, $st->rowCount());
-        }
-        catch (PDOException $e)
-        {
-            $this->fail($e->getMessage());
-        }
+        $this->passings->db->query('DROP TABLE IF EXISTS passings_test_table');
+        $this->assertFalse($this->passings->tableExists('passings_test_table'));
+        $this->passings->create_table('test_table');
+        $this->assertTrue($this->passings->tableExists('passings_test_table'));
     }
 
     public function testInsert()
@@ -80,5 +76,15 @@ class passing_dbTest extends TestCase
         $this->passings->save_transponder(['transponder_id' => 2583246, 'transponder_name' => 'Xray Xb2 2019', 'driver_name' => 'Steffler']);
         $st = $this->passings->db->query('SELECT * FROM transponders WHERE transponder_id=2583246');
         $this->assertEquals(1, $st->rowCount());
+    }
+
+    public function testUpdateTransponder()
+    {
+        $this->passings->save_transponder(['transponder_id' => 2583246, 'transponder_name' => 'Xray Xb2 2019', 'driver_name' => 'Steffler']);
+        $row = $this->passings->db->query('SELECT * FROM transponders WHERE transponder_id=2583246')->fetch();
+        $this->assertEquals('Steffler', $row['nickname']);
+        $this->passings->save_transponder(['transponder_id' => 2583246, 'transponder_name' => 'Xray Xb2 2019', 'driver_name' => 'Steffler_test']);
+        $row = $this->passings->db->query('SELECT * FROM transponders WHERE transponder_id=2583246')->fetch();
+        $this->assertEquals('Steffler_test', $row['nickname']);
     }
 }
