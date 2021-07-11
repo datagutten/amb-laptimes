@@ -2,7 +2,6 @@
 
 use datagutten\amb\laps\lap_timing;
 use PHPUnit\Framework\TestCase;
-use datagutten\amb\laps\lap_timing as laptimes;
 
 class lap_timesTest extends TestCase
 {
@@ -28,9 +27,9 @@ class lap_timesTest extends TestCase
 
     function testQueryToday()
     {
-        $q = laptimes::query_today(1588188349);
+        $q = lap_timing::query_today(1588188349);
         $this->assertEquals('rtc_time>=1588118400000000 AND rtc_time<=1588204740999999', $q);
-        $q = laptimes::query_today();
+        $q = lap_timing::query_today();
         $time_today_start=strtotime('0:00').'000000';
         $time_today_end=strtotime('23:59').'999999';
         $this->assertEquals(sprintf('rtc_time>=%d AND rtc_time<=%d', $time_today_start, $time_today_end), $q);
