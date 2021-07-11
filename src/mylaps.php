@@ -42,11 +42,11 @@ class mylaps
 
     /**
      * Get track activities
-     * @param string $mylaps_id MyLaps track ID
+     * @param int $mylaps_id MyLaps track ID
      * @return SimpleXMLElement[]
      * @throws MyLapsException
      */
-    public static function activities(string $mylaps_id): array
+    public static function activities(int $mylaps_id): array
     {
         $response = self::get(sprintf('https://speedhive.mylaps.com/Practice/%1$d/PracticeTrackData?id=%1$d', $mylaps_id));
         $dom=new DOMDocument;
@@ -159,12 +159,12 @@ class mylaps
 
     /**
      * Save transponder information and driver avatars
-     * @param string $mylaps_id MyLaps track ID
+     * @param int $mylaps_id MyLaps track ID
      * @param string $avatar_folder Avatar folder
      * @param passing_db $passing_db passing_db instance
      * @throws MyLapsException
      */
-    public function save_transponder_info(string $mylaps_id, string $avatar_folder, passing_db $passing_db)
+    public function save_transponder_info(int $mylaps_id, string $avatar_folder, passing_db $passing_db)
     {
         foreach ($activities = self::activities($mylaps_id) as $activity)
         {
