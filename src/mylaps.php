@@ -4,6 +4,7 @@
 namespace datagutten\amb\laps;
 
 
+use datagutten\amb\laps\exceptions\AvatarDownloadError;
 use datagutten\amb\laps\exceptions\MyLapsException;
 use DOMDocument;
 use Requests;
@@ -105,24 +106,24 @@ class mylaps
      * @param string $avatar_url URL to avatar
      * @param string $avatar_folder Avatar folder
      * @param int $transponder_id Transponder ID
-     * @throws MyLapsException
      * @return string Avatar file with extension
+     * @throws AvatarDownloadError
      */
     public static function download_avatar($avatar_url, $avatar_folder, $transponder_id)
     {
         $response = Requests::head($avatar_url);
         if(!$response->success)
-            throw new MyLapsException('Avatar head request error, HTTP status %d', $response->status_code);
+            throw new AvatarDownloadError('Avatar head request error, HTTP status %d', $response->status_code);
 
         $type = $response->headers['Content-Type'];
         $extension = preg_replace('#image/([a-z]+)#i', '$1', $type);
         if($type===$extension)
-            throw new MyLapsException('Unable to determine extension for MIME type '.$type);
+            throw new AvatarDownloadError('Unable to determine extension for MIME type '.$type);
 
         $avatar_file = sprintf('%s/%d.%s',$avatar_folder, $transponder_id, $extension);
         $response = Requests::get($avatar_url, [], ['filename'=>$avatar_file]);
         if(!file_exists($avatar_file) || !$response->success)
-            throw new MyLapsException(sprintf('Avatar download error, HTTP status %d', $response->status_code));
+            throw new AvatarDownloadError(sprintf('Avatar download error, HTTP status %d', $response->status_code));
 
         return $avatar_file;
     }
@@ -140,5 +141,45 @@ class mylaps
         if(empty($transponder))
             throw new MyLapsException('Transponder id not found');
         return (int)$transponder[1];
+    }
+
+    /**
+     * Save transponder information and driver avatars
+     * @param string $mylaps_id MyLaps track ID
+     * @param string $avatar_folder Avatar folder
+     * @param passing_db $passing_db passing_db instance
+     * @throws MyLapsException
+     */
+    public function save_transponder_info(string $mylaps_id, string $avatar_folder, passing_db $passing_db)
+    {
+        foreach ($activities = self::activities($mylaps_id) as $activity)
+        {
+            try
+            {
+                $activity_info = self::activity_info(self::activity_id($activity));
+            }
+            catch (MyLapsException $e)
+            {
+                echo $e->getMessage() . "\n";
+                continue;
+            }
+            if (empty($activity_info['transponder_name']) && empty($activity_info['driver_name']))
+                continue;
+            $passing_db->save_transponder($activity_info);
+
+            if (!empty($activity_info['avatar_url']))
+            {
+                try
+                {
+                    $avatar_file = self::download_avatar($activity_info['avatar_url'], $avatar_folder, $activity_info['transponder_id']);
+                    if (filesize($avatar_file) == 4544)
+                        unlink($avatar_file); //Do not save default avatar
+                }
+                catch (AvatarDownloadError $e)
+                {
+                    echo $e->getMessage() . "\n";
+                }
+            }
+        }
     }
 }
