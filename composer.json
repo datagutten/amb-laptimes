@@ -28,5 +28,5 @@
             "datagutten\\amb\\laps\\": "src"
         }
     },
-    "bin": ["get_users.php", "passing_saver.php"]
+    "bin": ["passing_saver.php"]
 }
