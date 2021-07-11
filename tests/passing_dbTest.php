@@ -32,6 +32,14 @@ class passing_dbTest extends TestCase
         $this->assertTrue($this->passings->tableExists('passings_test_table'));
     }
 
+    public function testInit()
+    {
+        $this->passings->db->query('DROP TABLE IF EXISTS passings_test_decoder');
+        $this->assertFalse($this->passings->tableExists('passings_test_decoder'));
+        $this->passings->init();
+        $this->assertTrue($this->passings->tableExists('passings_test_decoder'));
+    }
+
     public function testInsert()
     {
         $passings = $this->passings;
