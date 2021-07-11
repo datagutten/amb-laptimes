@@ -76,6 +76,9 @@ class passing_db
      */
 	function init_transponders()
     {
+        if(!$this->tableExists('transponders'))
+            $this->db->query(file_get_contents(__DIR__.'/transponders.sql'));
+
         $this->st_insert_transponder = $this->db->prepare('INSERT INTO transponders (transponder_id, transponder_name, nickname) VALUES (?,?,?)');
         $this->st_update_transponder = $this->db->prepare('UPDATE transponders SET transponder_name=?, nickname=? WHERE transponder_id=?');
         $this->transpondersInDB = $this->transponders(true);

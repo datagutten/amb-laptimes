@@ -21,7 +21,6 @@ class passing_dbTest extends TestCase
         $this->passings->db->query('DROP TABLE IF EXISTS passings_test_decoder');
 
         $this->passings->create_table('test_decoder');
-        $this->passings->db->query(file_get_contents(__DIR__.'/../src/transponders.sql'));
     }
 
     public function testCreate_table()
@@ -67,18 +66,31 @@ class passing_dbTest extends TestCase
 
     public function testTransponders()
     {
+        $this->passings->init_transponders();
+        $this->passings->db->query(file_get_contents(__DIR__.'/test_data/transponder_records.sql'));
         $transponders = $this->passings->transponders(true);
         $this->assertTrue(is_array($transponders));
+        $this->assertEquals("2284132", $transponders[1]);
     }
 
     public function testTransponders2()
     {
+        $this->passings->init_transponders();
+        $this->passings->db->query(file_get_contents(__DIR__.'/test_data/transponder_records.sql'));
         $transponders = $this->passings->transponders();
         $this->assertInstanceOf('PDOStatement', $transponders);
     }
 
+    public function testInitTransponders()
+    {
+        $this->assertFalse($this->passings->tableExists('transponders'));
+        $this->passings->init_transponders();
+        $this->assertTrue($this->passings->tableExists('transponders'));
+    }
+
     public function testSaveTransponder()
     {
+        $this->passings->init_transponders();
         $st = $this->passings->db->query('SELECT * FROM transponders WHERE transponder_id=2583246');
         $this->assertEquals(0, $st->rowCount());
         $this->passings->save_transponder(['transponder_id' => 2583246, 'transponder_name' => 'Xray Xb2 2019', 'driver_name' => 'Steffler']);
