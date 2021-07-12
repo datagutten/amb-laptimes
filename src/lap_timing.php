@@ -18,7 +18,7 @@ class lap_timing extends passing_db
 
     function __construct(array $config, string $decoder_id = null)
 	{
-        parent::__construct($config, $decoder_id);
+        parent::__construct($config['db'], $decoder_id);
 		date_default_timezone_set('GMT');
 	}
 	public static function query_today($timestamp_day=false): string
