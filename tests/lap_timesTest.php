@@ -13,7 +13,7 @@ class lap_timesTest extends TestCase
     public function setUp(): void
     {
         $config = require __DIR__.'/test_config.php';
-        $this->laps = new lap_timing($config['db'], '20f93');
+        $this->laps = new lap_timing($config, '20f93');
 
         if (!$this->laps->tableExists('transponders'))
         {
