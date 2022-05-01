@@ -35,24 +35,6 @@ class lap_timesTest extends TestCase
         $this->assertEquals(sprintf('rtc_time>=%d AND rtc_time<=%d', $time_today_start, $time_today_end), $q);
     }
 
-    public function testInvalidLimit()
-    {
-        $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage('Lap count limit is not numeric');
-        $this->laps->laps('a');
-    }
-
-    public function testInvalidLapTimeLimit()
-    {
-        $this->expectException(UnexpectedValueException::class);
-        $this->laps->laps(2, 'a');
-    }
-    public function testInvalidStartTime()
-    {
-        $this->expectException(UnexpectedValueException::class);
-        $this->laps->laps(2, 60, 'a');
-    }
-
     public function testRounds()
     {
         $lap_times = $this->laps->laps(5);

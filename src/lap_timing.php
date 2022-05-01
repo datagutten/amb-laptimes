@@ -66,15 +66,8 @@ class lap_timing extends passing_db
      * @return array
      * @throws PDOException Database error
      */
-    function laps($lap_count_limit = 90, $lap_time_limit = 60, $time_before = 0): array
+    function laps(int $lap_count_limit = 90, int $lap_time_limit = 60, int $time_before = 0): array
     {
-        if (!is_numeric($lap_count_limit))
-            throw new UnexpectedValueException('Lap count limit is not numeric');
-        if (!is_numeric($lap_time_limit))
-            throw new UnexpectedValueException('Lap time limit is not numeric');
-        if (!is_numeric($time_before))
-            throw new UnexpectedValueException('Time before is not numeric');
-
         //The returned number of passings might be lower than the limit because the limit includes invalid passings
         //TODO: Count and limit rounds instead of passings
         if($time_before == 0)
