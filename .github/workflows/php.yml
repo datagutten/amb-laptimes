@@ -57,7 +57,12 @@ jobs:
           extensions: sockets, curl, pdo_mysql
 
       - name: Install dependencies
+        if: ${{ matrix.php != '7.3' && matrix.php != '7.4' }}
         run: composer install --prefer-dist --no-progress
+
+      - name: Install dependencies
+        if: ${{ matrix.php == '7.3' || matrix.php == '7.4' }}
+        run: composer update --prefer-dist --no-progress
 
       - name: Setup database
         run: mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';"
