@@ -9,7 +9,7 @@ require $_composer_autoload_path ?? __DIR__ . '/../vendor/autoload.php';
 
 //Capture data from a AMB decoder using a socket
 
-$config = require 'config.php';
+$config = require __DIR__ . '/../config.php';
 if (empty($config['decoders']))
     die("Missing decoder key in config file\n");
 
