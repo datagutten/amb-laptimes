@@ -47,7 +47,7 @@ class mylapsTest extends TestCase
     {
         $activity = mylaps::activity_info(692252467);
         $this->assertEquals('kai rønning', $activity['driver_name'], 'Driver name does not match');
-        $this->assertEquals('kai rønning', $activity['transponder_name'], 'Transponder name does not match');
+        $this->assertEquals('kai rønning Ass B6.3', $activity['transponder_name'], 'Transponder name does not match');
         $this->assertEquals(9784547, $activity['transponder_id']);
         $this->assertEquals('https://speedhive.mylaps.com/Images/MYLAPS-GA-0c031e0ee83b4072b38efefd1b528d56/1', $activity['avatar_url']);
     }
