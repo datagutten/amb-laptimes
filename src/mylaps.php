@@ -7,9 +7,9 @@ namespace datagutten\amb\laps;
 use datagutten\amb\laps\exceptions\AvatarDownloadError;
 use datagutten\amb\laps\exceptions\MyLapsException;
 use DOMDocument;
-use Requests;
-use Requests_Exception;
-use Requests_Response;
+use WpOrg\Requests\Requests;
+use WpOrg\Requests\Exception as Requests_Exception;
+use WpOrg\Requests\Response as Requests_Response;
 use SimpleXMLElement;
 
 class mylaps
