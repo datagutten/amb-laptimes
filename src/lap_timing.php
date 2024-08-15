@@ -59,6 +59,23 @@ class lap_timing extends passing_db
     }
 
     /**
+     * Get last passings
+     * @param int $limit Number of passings to get
+     * @return Passing[]
+     */
+    public function passings(int $limit = 90): array
+    {
+        $passings = [];
+        $passings_db = $this->db->query(sprintf('SELECT * FROM %s ORDER BY rtc_time DESC LIMIT %d', $this->table, $limit));
+        while ($passing = $passings_db->fetch(PDO::FETCH_ASSOC))
+        {
+            $passing_obj = new Passing($passing);
+            $passings[$passing_obj->number] = $passing_obj;
+        }
+        return $passings;
+    }
+
+    /**
      * Get last rounds
      * @param int $lap_count_limit Limit the number of laps returned
      * @param int $lap_time_limit Lap times above this limit will be ignored
