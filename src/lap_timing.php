@@ -15,6 +15,9 @@ class lap_timing extends passing_db
 	public $best_rounds;
 	public $previous_round;
 	public $transponders;
+    protected static string $passing_class = Passing::class;
+    protected static string $lap_class = Lap::class;
+
 
     function __construct(array $config, string $decoder_id = null)
 	{
@@ -69,7 +72,7 @@ class lap_timing extends passing_db
         $passings_db = $this->db->query(sprintf('SELECT * FROM %s ORDER BY rtc_time DESC LIMIT %d', $this->table, $limit));
         while ($passing = $passings_db->fetch(PDO::FETCH_ASSOC))
         {
-            $passing_obj = new Passing($passing);
+            $passing_obj = new static::$passing_class($passing);
             $passings[$passing_obj->number] = $passing_obj;
         }
         return $passings;
