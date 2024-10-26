@@ -33,8 +33,8 @@ class Lap extends SimpleArrayAccess
         $this->lap_time = $info['lap_time'];
         $this->transponder_num = $info['transponder'];
 
-        $this->start_time = new DateTime($info['start_time']);
-        $this->end_time = new DateTime($info['end_time']);
+        $this->start_time = DateTime::createFromFormat('U', $info['start_time']);
+        $this->end_time = DateTime::createFromFormat('U', $info['end_time']);
 
         $this->start_number = $info['start_number'];
         $this->end_number = $info['end_number'];
