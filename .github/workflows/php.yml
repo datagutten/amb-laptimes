@@ -38,11 +38,11 @@ jobs:
         with:
           database: ${{ env.DB_DATABASE }}
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
 
       - name: Cache Composer packages
         id: composer-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: vendor
           key: ${{ runner.os }}-php${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
@@ -71,13 +71,13 @@ jobs:
         run: vendor/bin/phpunit
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v5
 
   prefer_lowest:
     name: 'Prefer lowest dependency versions'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
       - name: Setup PHP with Xdebug
         uses: shivammathur/setup-php@v2
         with:
